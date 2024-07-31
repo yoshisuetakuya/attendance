@@ -13,12 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class CustomLogoutSuccessHandler implements LogoutSuccessHandler{
 	 @Override
-	    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
-	                                Authentication authentication) throws IOException, ServletException {
+	    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 	        response.setStatus(HttpServletResponse.SC_OK); // 200ステータスコードを返す
-	     // レスポンスボディに書き込む必要がない場合、以下のコードは不要
-//	        response.getWriter().write("Logout successful!"); // 必要に応じてレスポンスボディにメッセージを設定
-//	        response.getWriter().flush();
 	    }
 
 }

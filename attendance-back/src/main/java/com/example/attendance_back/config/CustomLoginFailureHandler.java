@@ -13,11 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class CustomLoginFailureHandler implements AuthenticationFailureHandler{
 	 @Override
-	    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-	                                        AuthenticationException exception) throws IOException, ServletException {
+	    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 	        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401ステータスコードを返す
-//	        response.getWriter().write(""); // 必要に応じてレスポンスボディにメッセージを設定
-//	        response.getWriter().flush();
 	 }
 
 }

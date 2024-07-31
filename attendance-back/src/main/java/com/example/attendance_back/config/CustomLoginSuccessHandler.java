@@ -13,13 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler{
 	 @Override
-	    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-	                                        Authentication authentication) throws IOException, ServletException {
+	    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 	        response.setStatus(HttpServletResponse.SC_OK); // 200ステータスコードを返す
-	        // レスポンスボディに書き込む必要がない場合、以下のコードは不要
-//	        response.setContentType("application/json");
-//	        response.getWriter().write("{\"message\": \"Login successful\", \"redirect\": \"/test\"}"); // 必要に応じてレスポンスボディにメッセージを設定
-//	        response.getWriter().flush();
 	    }
 
 }

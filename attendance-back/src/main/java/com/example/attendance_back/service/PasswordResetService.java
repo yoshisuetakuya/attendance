@@ -13,9 +13,11 @@ import com.example.attendance_back.repository.EmployeeRepository;
 @Service
 public class PasswordResetService {
 	@Autowired
-	private EmployeeRepository employeeRepository; // ユーザー情報を扱うリポジトリ
+	private EmployeeRepository employeeRepository;
 	@Autowired
-	private PasswordEncoder passwordEncoder; // パスワードの暗号化
+	private PasswordEncoder passwordEncoder;
+//	@Autowired
+//	private EmailService emailService;
 
 	public boolean resetPassword(String email) {
 		EmployeeDto employee = employeeRepository.findByEmail(email);
@@ -28,6 +30,9 @@ public class PasswordResetService {
 			System.out.println("Password reset for " + email);
 			System.out.println("New password: " + newPassword);
 
+			 // 新しいパスワードをメールで送信
+//			emailService.sendPasswordResetEmail(email, newPassword);
+
 			return true;
 		}
 		return false;
@@ -35,9 +40,9 @@ public class PasswordResetService {
 
 	private String generateRandomPassword() {
 		SecureRandom random = new SecureRandom();
-		byte[] bytes = new byte[8]; // ランダムなバイトデータ
-		random.nextBytes(bytes);
-		return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+		byte[] data = new byte[8]; // ランダムなパスワード
+		random.nextBytes(data);
+		return Base64.getUrlEncoder().withoutPadding().encodeToString(data);
 	}
 
 }
