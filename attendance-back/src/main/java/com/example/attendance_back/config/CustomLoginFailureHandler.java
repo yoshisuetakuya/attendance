@@ -16,16 +16,27 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/**
+ *
+ * @author 芳末拓也
+ *
+ *         ログイン失敗時の処理を行うクラス
+ */
 @Component
 public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
 
-	// ログイン失敗の最大回数を定義
+	// ログイン失敗の最大回数
 	private final int MAX_COUNTS = 5;
+
 	@Autowired
 	private SecurityRepository securityRepository;
+
 	@Autowired
 	private EmployeeRepository employeeRepository;
 
+	/**
+	 * 認証失敗時に失敗回数に応じてアカウントをロックするメソッド
+	 */
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {

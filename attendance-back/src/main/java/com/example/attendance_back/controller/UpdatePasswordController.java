@@ -11,26 +11,32 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.attendance_back.service.PasswordUpdateService;
 
+/**
+ *
+ * @author 芳末拓也
+ *
+ *         ユーザーのパスワードを更新するコントローラクラス
+ *
+ */
 @RestController
 public class UpdatePasswordController {
 	@Autowired
 	private PasswordUpdateService passwordUpdateService;
 
-
+	/**
+	 * 現在のユーザーのパスワードを更新するメソッド
+	 *
+	 * @param requestBody
+	 */
 	@PostMapping("/updatePassword")
-	public String requestPasswordReset(@RequestBody Map<String, String> requestBody) {
+	public void requestPasswordReset(@RequestBody Map<String, String> requestBody) {
 		String currentPassword = requestBody.get("currentPassword");
 		String newPassword = requestBody.get("newPassword");
 		// 現在の認証ユーザーを取得
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName(); // 現在のユーザーのメールアドレス
-		boolean isUpdated = passwordUpdateService.updatePassword(email, currentPassword, newPassword);
-		;
-		if (isUpdated) {
-			return "パスワードを更新しました";
-		} else {
-			return "パスワードを更新できませんでした";
-		}
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		// 現在のユーザーのメールアドレスを取得
+		String email = authentication.getName();
+		passwordUpdateService.updatePassword(email, currentPassword, newPassword);
 	}
 
 }

@@ -9,6 +9,12 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ *
+ * @author 芳末拓也
+ *
+ *         入力された勤怠情報を受け取るエンティティクラス
+ */
 @Entity
 @Getter
 @Setter

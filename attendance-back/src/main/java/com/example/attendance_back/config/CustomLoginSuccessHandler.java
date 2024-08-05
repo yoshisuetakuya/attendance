@@ -16,23 +16,34 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/**
+ *
+ * @author 芳末拓也
+ *
+ *         ログイン成功時の処理を行うクラス
+ */
 @Component
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
 	@Autowired
 	private SecurityRepository securityRepository;
+
 	@Autowired
 	private EmployeeRepository employeeRepository;
 
+	/**
+	 * 認証成功時に失敗回数をリセットしてロックを解除するメソッド
+	 */
 	@Override
-	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-		//ユーザーのメールアドレスを取得
+	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+			Authentication authentication) throws IOException, ServletException {
+		// ユーザーのメールアドレスを取得
 		String email = authentication.getName();
 
 		// メールアドレスを使って従業員情報を取得
 		EmployeeDto employee = employeeRepository.findByEmail(email);
 
-		//従業員IDを使ってセキュリティ情報を取得:
+		// 従業員IDを使ってセキュリティ情報を取得:
 		SecurityDto security = securityRepository.findByEmployeeid(employee.getEmployeeid());
 
 		if (security != null) {

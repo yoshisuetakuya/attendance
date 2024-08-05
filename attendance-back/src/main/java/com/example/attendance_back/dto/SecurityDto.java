@@ -10,6 +10,12 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ *
+ * @author 芳末拓也
+ *
+ *         データベースのsecurityテーブルにマッピングされるセキュリティ情報のエンティティクラス
+ */
 @Entity
 @Getter
 @Setter

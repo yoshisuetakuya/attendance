@@ -11,17 +11,24 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ *
+ * @author 芳末拓也
+ *
+ *
+ *         データベースのsystemテーブルにマッピングされるシステム情報のエンティティクラス
+ */
 @Entity
 @Getter
 @Setter
 @Table(name = "system")
 public class SystemDto {
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "systemid")
-    private Integer systemid;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "systemid")
+	private Integer systemid;
 
-    @Column(name = "editingperiod")
-    private Date editingperiod;
+	@Column(name = "editingperiod")
+	private Date editingperiod;
 
 }
