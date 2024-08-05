@@ -11,9 +11,9 @@ public class SystemController {
 	@Autowired
     private SystemService systemService;
 
-    @GetMapping("/getYearMonth")
+    @GetMapping("/getEdithingPeriod")
     public String getYearMonth() {
-        return systemService.getYearMonth();
+        return systemService.getEdithingPeriod();
     }
 
 }

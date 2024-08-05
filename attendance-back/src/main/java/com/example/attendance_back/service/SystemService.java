@@ -10,8 +10,8 @@ public class SystemService {
 	  @Autowired
 	    private SystemRepository systemRepository;
 
-	    public String getYearMonth() {
-	        return systemRepository.getYearMonth();
+	    public String getEdithingPeriod() {
+	        return systemRepository.getEdithingPeriod();
 	    }
 
 }

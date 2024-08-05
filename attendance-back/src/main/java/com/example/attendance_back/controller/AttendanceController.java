@@ -1,38 +1,30 @@
 package com.example.attendance_back.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.attendance_back.dto.EmployeeDto;
-import com.example.attendance_back.service.CreateUserService;
-import com.example.attendance_back.service.LoginUserDetails;
+import com.example.attendance_back.dto.AttendanceDto;
+import com.example.attendance_back.dto.RegisterAttendanceDto;
+import com.example.attendance_back.service.AttendanceService;
 
 @RestController
 public class AttendanceController {
+    @Autowired
+    private AttendanceService attendanceService;
 
-	 @Autowired
-	    private CreateUserService createUserService;
+    @GetMapping("/getAttendance/{year}/{month}")
+    public List<AttendanceDto> getAttendance(@PathVariable("year") Integer year, @PathVariable("month") Integer month) {
+        return attendanceService.getAttendance(year, month);
+    }
 
-	 @PostMapping("/createUser")
-	    public String registerUser(@RequestBody EmployeeDto employeeDto) {
-		 createUserService.registerUser(employeeDto);
-	        return ("新規ユーザーが登録されました");
-	    }
-	 //　ユーザー情報を確認するためのAPI
-	 @GetMapping("/user")
-	    public String getUserInfo() {
-	        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	        if (auth != null) {
-	            LoginUserDetails userDetails = (LoginUserDetails) auth.getPrincipal();
-	            return ("名前: " + userDetails.getName()+" Email: " + userDetails.getUsername()+" パスワード: " + userDetails.getPassword());
-	        }
-	        return "ユーザーが見つかりませんでした";
-	    }
-
-
+    @PostMapping("/register")
+    public void registerAttendance(@RequestBody RegisterAttendanceDto registerAttendancedto) {
+    	attendanceService.register(registerAttendancedto);
+    }
 }
