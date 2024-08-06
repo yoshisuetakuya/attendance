@@ -15,6 +15,12 @@ import com.example.attendance_back.dto.RegisterAttendanceDto;
 import com.example.attendance_back.repository.AttendanceRepository;
 import com.example.attendance_back.repository.EmployeeRepository;
 
+/**
+ *
+ * @author 芳末拓也
+ *
+ *         勤怠情報の取得と登録を行うサービスクラス
+ */
 @Service
 public class AttendanceService {
 	@Autowired
@@ -23,6 +29,13 @@ public class AttendanceService {
 	@Autowired
 	private EmployeeRepository employeeRepository;
 
+	/**
+	 * 指定された年月の勤怠情報を取得するメソッド
+	 *
+	 * @param year
+	 * @param month
+	 * @return 指定された年月の勤怠情報のリスト
+	 */
 	public List<AttendanceDto> getAttendance(Integer year, Integer month) {
 		// 現在ログインしているユーザー情報を取得
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -34,6 +47,11 @@ public class AttendanceService {
 		return attendanceRepository.findByEmployeeidAndYearAndMonth(employeeid, year, month);
 	}
 
+	/**
+	 * 勤怠情報を登録または更新を行うメソッド
+	 *
+	 * @param registerAttendanceDto
+	 */
 	public void register(RegisterAttendanceDto registerAttendanceDto) {
 		// 現在ログインしているユーザー情報を取得
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -48,7 +66,8 @@ public class AttendanceService {
 		Integer day = registerAttendanceDto.getDay();
 
 		// 年月日から存在するデータを取得
-		AttendanceDto existingAttendance = attendanceRepository.findByEmployeeidAndYearAndMonthAndDay(employeeid, year, month, day);
+		AttendanceDto existingAttendance = attendanceRepository.findByEmployeeidAndYearAndMonthAndDay(employeeid, year,
+				month, day);
 
 		if (existingAttendance != null) {
 			// 既存のレコードがある場合は更新
@@ -86,6 +105,12 @@ public class AttendanceService {
 		}
 	}
 
+	/**
+	 * 文字列形式の時間をLocalTimeに変換するメソッド
+	 *
+	 * @param timeString
+	 * @return 変換されたLocalTime型の時間
+	 */
 	private LocalTime parseTime(String timeString) {
 		// 文字列で受け取った時間をH:mm形式にしてLocalTime型に変換する
 		return LocalTime.parse(timeString, DateTimeFormatter.ofPattern("H:mm"));

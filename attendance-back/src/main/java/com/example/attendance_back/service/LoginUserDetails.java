@@ -7,66 +7,117 @@ import com.example.attendance_back.dto.EmployeeDto;
 
 import java.util.Collection;
 
+/**
+ *
+ * @author 芳末拓也
+ *
+ *         ユーザーの認証情報を提供するサービスクラス
+ *
+ *         EmployeeDtoオブジェクトを使用してユーザー情報を管理する
+ *
+ */
 public class LoginUserDetails implements UserDetails {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
-	//作成したEmployeeDtoをフィールドに持たせる
-    private final EmployeeDto employee;
 
+	private final EmployeeDto employee;
 
-    /**
-	 * コンストラクタ
+	/**
+	 * EmployeeDtoオブジェクトを初期化するコンストラクタ
+	 *
 	 * @param employee
 	 */
-    public LoginUserDetails(EmployeeDto employee) {
-        this.employee = employee;
-    }
+	public LoginUserDetails(EmployeeDto employee) {
+		this.employee = employee;
+	}
 
-    /**
-	 * ロールの取得（今回は使わないのでnullをリターン）
+	/**
+	 * ユーザーに割り当てられた権限を返すメソッド
+	 *
+	 * @return ユーザーの権限
 	 */
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-    	return null;
-    }
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// 権限の設定が必要な場合はここで返す
+		// 今回は未設定のためnullを返している
+		return null;
+	}
 
-    @Override
-    public String getPassword() {
+	/**
+	 * ユーザーのパスワードを返すメソッド
+	 *
+	 * @return パスワード
+	 */
+	@Override
+	public String getPassword() {
+		// EmployeeDtoから取得した暗号化済みパスワードを返す
 		return employee.getPassword();
 
-    }
+	}
 
-    @Override
-    public String getUsername() {
-        return employee.getEmail(); // データベースから取得したメールアドレスをユーザー名として返す
-    }
+	/**
+	 * ユーザーのメールアドレスを返すメソッド
+	 *
+	 * @return メールアドレス
+	 */
+	@Override
+	public String getUsername() {
+		// EmployeeDtoから取得したメールアドレスをユーザー名として返す
+		return employee.getEmail();
+	}
 
-    //ユーザー名の確認用
-    public String getName() {
+	/**
+	 * ユーザーの名前を返すメソッド
+	 *
+	 * @return 名前
+	 */
+	public String getName() {
+		// EmployeeDtoから取得した名前を返す
 		return employee.getName();
 
-    }
+	}
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true; //  ユーザーが期限切れでなければtrueを返す
-    }
+	/**
+	 * ユーザーアカウントが期限切れでないかどうかを返すメソッド
+	 *
+	 * @return true（期限切れでない場合）
+	 */
+	@Override
+	public boolean isAccountNonExpired() {
+		// アカウントが期限切れでないことを示す
+		return true;
+	}
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true; //  ユーザーがロックされていなければtrueを返す
-    }
+	/**
+	 * ユーザーアカウントがロックされていないかどうかを返すメソッド
+	 *
+	 * @return true（ロックされていない場合）
+	 */
+	@Override
+	public boolean isAccountNonLocked() {
+		// アカウントがロックされていないことを示す
+		return true;
+	}
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true; //  パスワードが期限切れでなければtrueを返す
-    }
+	/**
+	 * ユーザーの資格情報が期限切れでないかどうかを返すメソッド
+	 *
+	 * @return true（期限切れでない場合）
+	 */
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// 資格情報（パスワード）が期限切れでないことを示す
+		return true;
+	}
 
-    @Override
-    public boolean isEnabled() {
-        return true; //  ユーザーが有効ならtrueを返す
-    }
+	/**
+	 * ユーザーアカウントが有効かどうかを返すメソッド
+	 *
+	 * @return true（有効な場合）
+	 */
+	@Override
+	public boolean isEnabled() {
+		// アカウントが有効であることを示す
+		return true;
+	}
 }

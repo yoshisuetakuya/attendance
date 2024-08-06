@@ -15,7 +15,6 @@ import lombok.Setter;
  *
  * @author 芳末拓也
  *
- *
  *         データベースのsystemテーブルにマッピングされるシステム情報のエンティティクラス
  */
 @Entity

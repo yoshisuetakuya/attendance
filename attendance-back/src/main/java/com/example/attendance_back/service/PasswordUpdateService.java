@@ -7,6 +7,12 @@ import org.springframework.stereotype.Service;
 import com.example.attendance_back.dto.EmployeeDto;
 import com.example.attendance_back.repository.EmployeeRepository;
 
+/**
+ *
+ * @author 芳末拓也
+ *
+ *         パスワードの更新を行うサービスクラス
+ */
 @Service
 public class PasswordUpdateService {
 	@Autowired
@@ -14,14 +20,23 @@ public class PasswordUpdateService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	public boolean updatePassword(String email, String currentPassword, String newPassword) {
-		 EmployeeDto employee = employeeRepository.findByEmail(email);
-        if (employee != null && passwordEncoder.matches(currentPassword, employee.getPassword())) {
-            employee.setPassword(passwordEncoder.encode(newPassword));
-            employeeRepository.save(employee);
-            return true;
-        }
-        return false;
-    }
+	/**
+	 * ユーザーのパスワードを更新するメソッド
+	 *
+	 * @param email
+	 * @param currentPassword
+	 * @param newPassword
+	 */
+	public void updatePassword(String email, String currentPassword, String newPassword) {
+		// 指定されたメールアドレスでユーザーを検索
+		EmployeeDto employee = employeeRepository.findByEmail(email);
+		// 現在のパスワードが保存されたパスワードと一致する場合は新しいパスワード保存
+		if (employee != null && passwordEncoder.matches(currentPassword, employee.getPassword())) {
+			employee.setPassword(passwordEncoder.encode(newPassword));
+			employeeRepository.save(employee);
+
+		}
+
+	}
 
 }

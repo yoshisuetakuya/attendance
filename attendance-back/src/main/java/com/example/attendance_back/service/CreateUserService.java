@@ -7,20 +7,31 @@ import org.springframework.stereotype.Service;
 import com.example.attendance_back.dto.EmployeeDto;
 import com.example.attendance_back.repository.EmployeeRepository;
 
+/**
+ *
+ * @author 芳末拓也
+ *
+ *         新規ユーザーの登録を行うサービスクラス
+ */
 @Service
 public class CreateUserService {
 	@Autowired
-    private EmployeeRepository employeeRepository;
+	private EmployeeRepository employeeRepository;
 
-	 @Autowired
-	    private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
-	 public void registerUser(EmployeeDto employeeDto) {
-	        // パスワードの暗号化
-	        String encodedPassword = passwordEncoder.encode(employeeDto.getPassword());
-	        employeeDto.setPassword(encodedPassword);
-	        // 新規ユーザー情報を保存
-	        employeeRepository.save(employeeDto);
-	    }
+	/**
+	 * 新規ユーザーを登録するメソッド
+	 *
+	 * @param employeeDto
+	 */
+	public void registerUser(EmployeeDto employeeDto) {
+		// パスワードの暗号化
+		String encodedPassword = passwordEncoder.encode(employeeDto.getPassword());
+		employeeDto.setPassword(encodedPassword);
+		// 新規ユーザー情報を保存
+		employeeRepository.save(employeeDto);
+	}
 
 }

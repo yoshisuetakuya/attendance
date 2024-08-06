@@ -15,6 +15,12 @@ import com.example.attendance_back.dto.SecurityDto;
 import com.example.attendance_back.repository.EmployeeRepository;
 import com.example.attendance_back.repository.SecurityRepository;
 
+/**
+ *
+ * @author 芳末拓也
+ *
+ *         ユーザーのログイン処理を行うサービスクラス
+ */
 @Service
 public class LoginService implements UserDetailsService {
 
@@ -24,6 +30,12 @@ public class LoginService implements UserDetailsService {
 	@Autowired
 	private SecurityRepository securityRepository;
 
+	/**
+	 * 指定されたメールアドレスに基づいてユーザー情報を探しログイン失敗時の処理を記載したメソッド
+	 *
+	 * @param email
+	 * @return LoginUserDetails
+	 */
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		// メールアドレスから従業員情報を取得
@@ -39,7 +51,7 @@ public class LoginService implements UserDetailsService {
 		if (security != null && security.getLockTime() != null) {
 			// 現在の時間とロック時間の差を計算する
 			long lockTime = TimeUnit.MILLISECONDS.toMinutes(new Date().getTime() - security.getLockTime().getTime());
-			if (lockTime < 1) {
+			if (lockTime < 15) {
 				throw new UsernameNotFoundException("アカウントがロックされました");
 			}
 		}
