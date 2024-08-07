@@ -48,7 +48,7 @@ const Login = () => {
 
       // レスポンスが空でも成功を扱う
     if (response.status === 200) {
-      router.push('/ManthlyList');
+      router.push('/Sample');
     } else {
       alert('ログインに失敗しました');
     }
