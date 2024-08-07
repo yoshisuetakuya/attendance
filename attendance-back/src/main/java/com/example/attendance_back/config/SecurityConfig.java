@@ -1,5 +1,7 @@
 package com.example.attendance_back.config;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
  *
@@ -54,19 +59,42 @@ public class SecurityConfig {
 				).logout(logout -> logout // ログアウト画面の設定
 						.permitAll()// 誰でもログアウトできる
 						.logoutSuccessHandler(customLogoutSuccessHandler) // カスタムログアウト成功ハンドラ
-				);
+				).cors(cors -> cors.configurationSource(corsConfigurationSource())); // CORS設定を有効にする
 
 		return http.build();
 	}
 
 	/**
-	 * パスワードのエンコードを行うクラス
+	 * パスワードのエンコードを行う
 	 *
 	 * @return BCryptPasswordEncoder
 	 */
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	/**
+	 * CORS設定を行う
+	 *
+	 * @return CorsConfigurationSource
+	 */
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		// クライアントのオリジンを指定
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+		// 許可するメソッドを指定
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+		// 許可するリクエストヘッダーを指定
+		configuration.setAllowedHeaders(Arrays.asList("content-type"));
+		// クッキーなどの認証情報を送信するための設定
+		configuration.setAllowCredentials(true);
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		// 全てのURLパターンに対して上記のCORS設定を適用
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 
 }
