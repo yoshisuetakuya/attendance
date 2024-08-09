@@ -6,7 +6,6 @@ import {
   Grid,
   IconButton,
   InputAdornment,
-  Link,
   TextField,
   Typography,
 } from "@mui/material";
@@ -15,141 +14,182 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
 import router from "next/router";
 import Header from "./components/Heder";
+import { Controller, useForm } from "react-hook-form";
+import CreateNewUser from "./components/CreateNewUser";
+import PasswordReissue from "./components/PasswordReissue";
+
+// フォームのデータ型を定義
+interface FormValues {
+  email: string;
+  password: string;
+}
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [openRegister, setOpenEmployeeRegister] = useState(false);
+  const [openResetPassword, setOpenResetPassword] = useState(false);
 
+  // useFormフックを使ってフォームの管理とバリデーションを設定
+  const { control, handleSubmit, formState: { errors }, setError } = useForm<FormValues>();
+
+  // パスワードの表示と非表示の切り替え処理
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  async function handleSubmit(event: React.FormEvent) {
-    event.preventDefault();
+  // 新規登録ダイアログの開閉の処理
+  const handleOpenEmployeeRegister = () => setOpenEmployeeRegister(true);
+  const handleCloseEmployeeRegister = () => setOpenEmployeeRegister(false);
 
-    // application/x-www-form-urlencodedで送信するためURLSearchParams()を使用する
-    const data = new URLSearchParams();
-    data.append('email', email);
-    data.append('password', password);
+  // パスワード再発行ダイアログの開閉処理
+  const handleOpenResetPassword = () => setOpenResetPassword(true);
+  const handleCloseResetPassword = () => setOpenResetPassword(false);
 
+  // フォーム送信処理
+  const onSubmit = async (data: FormValues) => {
+    const { email, password } = data;
+
+    // URLSearchParams()を使用してapplication/x-www-form-urlencoded形式で送信する
+    const formData = new URLSearchParams();
+    formData.append('email', email);
+    formData.append('password', password);
+    
     try {
       const response = await fetch('http://localhost:8080/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: data
+        body: formData,
+        // リクエストにクッキーを含める
+        credentials: 'include'
       });
-
-      if (!response.ok) {
-        throw new Error('ネットワークエラー');
+      // ステータスコードが２００の時ログイン
+      if (response.status === 200) {
+        router.push('/Sample');
+      } else {
+        setError('email', {
+          type: 'manual',
+          message: 'メールアドレスまたはパスワードが違います',
+        });
+        setError('password', {
+          type: 'manual',
+          message: 'メールアドレスまたはパスワードが違います',
+        });
       }
-
-      // レスポンスが空でも成功を扱う
-    if (response.status === 200) {
-      router.push('/Sample');
-    } else {
-      alert('ログインに失敗しました');
+    } catch {
+      setError('password', {
+        type: 'manual',
+        message: 'ログインに失敗しました',
+      });
     }
-    } catch (error) {
-      console.error('エラー:', error);
-    }
-  };
-
-
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
   };
 
   return (
     <>
-    <Header />
-    <Container maxWidth="xs">
-      <Box
-        sx={{
-          mt: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography component="h1" variant="h4" gutterBottom>
-          ログイン
-        </Typography>
-
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-          <TextField
-            label="メールアドレス"
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            required
-            // id="email"
-            // name="email"
-            // autoComplete="email"
-            // autoFocus
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-
-          <TextField
-            label="パスワード"
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            required
-            type={showPassword ? 'text' : 'password'}
-            // type="password"
-            // name="password"
-            // id="password"
-            // autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            // inputProps={{
-            //   pattern: "(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{8,}",
-            //   title: "パスワードは8文字以上で半角英数字を含めてください"
-            // }}
-          />
-          <Button
-            variant="contained"
-            type="submit"
-            fullWidth
-            sx={{ mt: 3, mb: 2 }}
-          >
+      <Header />
+      <Container maxWidth="xs">
+        <Box
+          sx={{
+            mt: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography component="h1" variant="h4" gutterBottom>
             ログイン
-          </Button>
+          </Typography>
 
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                パスワード再発行
-              </Link>
-            </Grid>
+          <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
+            {/* メールアドレス入力フィールド */}
+            <Controller
+              name="email"
+              control={control}
+              defaultValue=""
+              rules={{ required: "メールアドレスは必須です" }}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="メールアドレス"
+                  variant="outlined"
+                  margin="normal"
+                  fullWidth
+                  error={!!errors.email}
+                  helperText={errors.email?.message}
+                />
+              )}
+            />
 
-            <Grid item>
-              <Link href="#" variant="body2">
-                新規登録
-              </Link>
+            <Controller
+              name="password"
+              control={control}
+              defaultValue=""
+              rules={{ required: "パスワードは必須です" }}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="パスワード"
+                  variant="outlined"
+                  margin="normal"
+                  fullWidth
+                  type={showPassword ? 'text' : 'password'}
+                  error={!!errors.password}
+                  helperText={errors.password?.message}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={handleClickShowPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              )}
+            />
+            <Button
+              variant="contained"
+              type="submit"
+              fullWidth
+              sx={{ mt: 3, mb: 2 }}
+            >
+              ログイン
+            </Button>
+
+            <Grid container>
+              <Grid item xs>
+                <Button onClick={handleOpenResetPassword}>
+                  パスワード再発行
+                </Button>
+              </Grid>
+
+              <Grid item>
+                <Button onClick={handleOpenEmployeeRegister}>
+                  新規登録
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
+          </Box>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+
+      {/* 新規登録ダイアログコンポーネント */}
+      <CreateNewUser
+        open={openRegister}
+        onClose={handleCloseEmployeeRegister}
+        showPassword={showPassword}
+        handleClickShowPassword={handleClickShowPassword}
+      />
+
+      {/* パスワード再発行ダイアログ */}
+      <PasswordReissue
+        open={openResetPassword}
+        onClose={handleCloseResetPassword}
+      />
     </>
   );
 };

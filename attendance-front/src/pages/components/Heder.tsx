@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, Typography } from '@mui/material';
 
-const Header: React.FC = () => {
+const Header = () => {
   return (
     <AppBar position="static">
       <Toolbar>
