@@ -85,7 +85,7 @@ public class SecurityConfig {
 		// クライアントのオリジンを指定
 		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
 		// 許可するメソッドを指定
-		configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS"));
 		// 許可するリクエストヘッダーを指定
 		configuration.setAllowedHeaders(Arrays.asList("content-type"));
 		// クッキーなどの認証情報を送信するための設定

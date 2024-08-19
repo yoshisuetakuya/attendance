@@ -29,8 +29,9 @@ public class PasswordResetService {
 	 * 指定されたメールアドレスのユーザーのパスワードをリセットするメソッド
 	 *
 	 * @param email
+	 * @return boolean
 	 */
-	public void resetPassword(String email) {
+	public boolean resetPassword(String email) {
 		// メールアドレスからユーザー情報を取得
 		EmployeeDto employee = employeeRepository.findByEmail(email);
 		// ユーザーが存在する場合
@@ -46,7 +47,11 @@ public class PasswordResetService {
 			// 実際にメールを送る機能を使う際にここのコメントアウトを外す
 //			emailService.sendPasswordResetEmail(email, newPassword);
 
+			return true;
+
 		}
+
+		 return false;
 
 	}
 

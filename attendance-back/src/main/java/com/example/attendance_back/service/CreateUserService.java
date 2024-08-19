@@ -34,4 +34,14 @@ public class CreateUserService {
 		employeeRepository.save(employeeDto);
 	}
 
+	/**
+     * 指定されたメールアドレスが既に存在するかを確認するメソッド
+     *
+     * @param email
+     * @return true: メールアドレスが存在する / false: 存在しない
+     */
+    public boolean isEmailAlreadyRegistered(String email) {
+        return employeeRepository.findByEmail(email) != null;
+    }
+
 }
