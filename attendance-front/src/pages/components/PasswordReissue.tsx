@@ -18,9 +18,29 @@ const PasswordReissue = ({ open, onClose }: PasswordReissueProps) => {
         },
     });
 
-    const onSubmit = (data: FormValues) => {
-        console.log(data.email);
-        onClose();
+    const onSubmit = async (data: FormValues) => {
+        try {
+            // ユーザー登録のための POST リクエスト
+            const response = await fetch("http://localhost:8080/reissue", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: data.email,
+                }),
+            });
+            if (response.status === 200) {
+                alert("パスワードを再発行しました");
+                onClose();
+            } else if (response.status === 404) {
+                alert("メールアドレスが見つかりませんでした");
+            } else {
+                alert("パスワードの再発行処理に失敗しました");
+            }
+        } catch {
+            alert("パスワードの再発行処理中にエラーが発生しました");
+        }
     };
 
     return (

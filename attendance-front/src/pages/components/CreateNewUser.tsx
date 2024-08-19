@@ -57,6 +57,8 @@ const CreateNewUser = ({
       if (response.status === 200) {
         alert("登録に成功しました");
         onClose();
+      } else if (response.status === 409) {
+        alert("このメールアドレスはすでに登録されています");
       } else {
         alert("ユーザー登録に失敗しました");
       }
