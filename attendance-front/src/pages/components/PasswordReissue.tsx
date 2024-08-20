@@ -12,15 +12,10 @@ interface FormValues {
 }
 
 const PasswordReissue = ({ open, onClose }: PasswordReissueProps) => {
-    const { control, handleSubmit, formState: { errors } } = useForm<FormValues>({
-        defaultValues: {
-            email: "",
-        },
-    });
+    const { control, handleSubmit, formState: { errors } } = useForm<FormValues>({ defaultValues: { email: ""}});
 
     const onSubmit = async (data: FormValues) => {
         try {
-            // ユーザー登録のための POST リクエスト
             const response = await fetch("http://localhost:8080/reissue", {
                 method: "POST",
                 headers: {

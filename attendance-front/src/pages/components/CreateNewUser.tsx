@@ -37,7 +37,7 @@ const CreateNewUser = ({
       name: "",
       email: "",
       password: "",
-    },
+    }
   });
 
   const onSubmit = async (data: FormValues) => {

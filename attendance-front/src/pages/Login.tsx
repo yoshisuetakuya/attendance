@@ -13,7 +13,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
 import router from "next/router";
-import Header from "./components/Heder";
+import Header from "./components/Header";
 import { Controller, useForm } from "react-hook-form";
 import CreateNewUser from "./components/CreateNewUser";
 import PasswordReissue from "./components/PasswordReissue";
@@ -66,7 +66,7 @@ const Login = () => {
       });
       // ステータスコードが２００の時ログイン
       if (response.status === 200) {
-        router.push('/Sample');
+        router.push('/MonthlyList');
       } else {
         setError('email', {
           type: 'manual',
