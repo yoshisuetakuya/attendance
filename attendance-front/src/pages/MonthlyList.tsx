@@ -2,14 +2,38 @@ import * as React from 'react';
 import { FormControl, Grid, InputLabel, Link, List, ListItem, MenuItem, Select, Typography } from "@mui/material";
 import Header from "./components/Header";
 import { SelectChangeEvent } from '@mui/material/Select';
+import { useEffect, useState } from 'react';
 
 const MonthlyList = () => {
   const years = [2024, 2025, 2026];
   const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-  const [year, setYear] = React.useState<string>('');
+  const [year, setYear] = useState<string>('');
+  const [SystemData, setSystemData] = useState([]);
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     setYear(event.target.value);
+  };
+
+  useEffect(() => {
+    console.log('Fetching system data');
+    fetchSystemData();
+  }, []);
+
+  const fetchSystemData = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/getEdithingPeriod", {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // クッキーを送信する
+      });
+      const data = await response.json();
+      setSystemData(data);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
