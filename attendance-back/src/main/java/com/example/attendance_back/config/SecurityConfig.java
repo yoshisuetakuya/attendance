@@ -85,15 +85,17 @@ public class SecurityConfig {
 		// クライアントのオリジンを指定
 		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
 		// 許可するメソッドを指定
-		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
 		// 許可するリクエストヘッダーを指定
 		configuration.setAllowedHeaders(Arrays.asList("content-type"));
 		// クッキーなどの認証情報を送信するための設定
 		configuration.setAllowCredentials(true);
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
 		// 全てのURLパターンに対して上記のCORS設定を適用
 		source.registerCorsConfiguration("/**", configuration);
+
 		return source;
 	}
 
