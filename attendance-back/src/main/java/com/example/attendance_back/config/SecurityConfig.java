@@ -59,6 +59,8 @@ public class SecurityConfig {
 				).logout(logout -> logout // ログアウト画面の設定
 						.permitAll()// 誰でもログアウトできる
 						.logoutSuccessHandler(customLogoutSuccessHandler) // カスタムログアウト成功ハンドラ
+						.invalidateHttpSession(true) // セッション無効化
+		                .deleteCookies("JSESSIONID") // セッションIDのクッキー削除
 				).cors(cors -> cors.configurationSource(corsConfigurationSource())); // CORS設定を有効にする
 
 		return http.build();

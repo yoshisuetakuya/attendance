@@ -30,12 +30,20 @@ public class PasswordUpdateService {
 	public void updatePassword(String email, String currentPassword, String newPassword) {
 		// 指定されたメールアドレスでユーザーを検索
 		EmployeeDto employee = employeeRepository.findByEmail(email);
-		// 現在のパスワードが保存されたパスワードと一致する場合は新しいパスワード保存
-		if (employee != null && passwordEncoder.matches(currentPassword, employee.getPassword())) {
-			employee.setPassword(passwordEncoder.encode(newPassword));
-			employeeRepository.save(employee);
-
+		if (employee == null) {
+			// メールアドレスが見つからない場合のエラー
+			throw new IllegalArgumentException("メールアドレスが見つかりませんでした");
 		}
+
+		// 現在のパスワードが保存されたパスワードと一致するか確認
+		if (!passwordEncoder.matches(currentPassword, employee.getPassword())) {
+			// 現在のパスワードが一致しない場合のエラー
+			throw new IllegalArgumentException("現在のパスワードが見つかりませんでした");
+		}
+
+		// 新しいパスワードをエンコードして保存
+		employee.setPassword(passwordEncoder.encode(newPassword));
+		employeeRepository.save(employee);
 
 	}
 

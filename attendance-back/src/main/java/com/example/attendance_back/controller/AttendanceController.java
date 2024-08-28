@@ -43,7 +43,7 @@ public class AttendanceController {
 	 * @param registerAttendancedto
 	 */
 	@PostMapping("/register")
-	public void registerAttendance(@RequestBody RegisterAttendanceDto registerAttendancedto) {
-		attendanceService.register(registerAttendancedto);
+	public void registerAttendance(@RequestBody List<RegisterAttendanceDto> registerAttendancedtoList) {
+	    attendanceService.register(registerAttendancedtoList);
 	}
 }
