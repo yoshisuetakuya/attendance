@@ -17,12 +17,8 @@ import Header from "./components/Header";
 import { Controller, useForm } from "react-hook-form";
 import CreateNewUser from "./components/CreateNewUser";
 import PasswordReissue from "./components/PasswordReissue";
+import { FormValues } from "./types/index";
 
-// フォームのデータ型を定義
-interface FormValues {
-  email: string;
-  password: string;
-}
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);

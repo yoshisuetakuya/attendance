@@ -13,18 +13,8 @@ import {
   TextField,
 } from "@mui/material";
 import router from "next/router";
+import { PasswordUpdateProps, UpdateFormValues } from "../types/index";
 
-interface PasswordUpdateProps {
-  open: boolean;
-  onClose: () => void;
-  showPassword: boolean;
-  handleClickShowPassword: () => void;
-}
-
-interface FormValues {
-  currentPassword: string;
-  newPassword: string;
-}
 
 const PasswordUpdate = ({
   open,
@@ -32,14 +22,14 @@ const PasswordUpdate = ({
   showPassword,
   handleClickShowPassword,
 }: PasswordUpdateProps) => {
-  const { control, handleSubmit, formState: { errors } } = useForm<FormValues>({
+  const { control, handleSubmit, formState: { errors } } = useForm<UpdateFormValues>({
     defaultValues: {
       currentPassword: "",
       newPassword: "",
     }
   });
 
-  const onSubmit = async (data: FormValues) => {
+  const onSubmit = async (data: UpdateFormValues) => {
     try {
       // ユーザー登録のための POST リクエスト
       const response = await fetch("http://localhost:8080/updatePassword", {

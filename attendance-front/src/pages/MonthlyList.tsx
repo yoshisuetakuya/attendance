@@ -4,17 +4,28 @@ import Header from "./components/Header";
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useEffect, useState } from 'react';
 import router from 'next/router';
-import PasswordUpdate from './components/PasswordUpdate';
+import PasswordUpdate from './components//PasswordUpdate';
+import { SystemData } from './types/index';
 
 const MonthlyList = () => {
-  const years = [2024, 2025, 2026];
   const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-  const [year, setYear] = useState<string>('');
   // 編集期間の情報を保持
-  const [SystemData, setSystemData] = useState([]);
-   // ダイアログの表示状態を管理
+  const [SystemData, setSystemData] = useState<SystemData[]>([]);
+  // ダイアログの表示状態を管理
   const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  // 現在の年を取得
+  const currentYear = new Date().getFullYear();
+  const pastYears = 2; // 過去3年
+  // デフォルト値で現在の年を設定
+  const [year, setYear] = useState<string>(currentYear.toString());
+  const years = [];
+  // 過去３年分の年を生成する
+  for (let i = pastYears; i >= 0; i--) {
+    years.push(currentYear - i);
+  }
+
+
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     setYear(event.target.value);
@@ -47,6 +58,7 @@ const MonthlyList = () => {
       });
       const data = await response.json();
       setSystemData(data);
+
       console.log(data);
     } catch (error) {
       console.log(error);
@@ -105,11 +117,11 @@ const MonthlyList = () => {
         </Grid>
       </Grid>
 
-      <PasswordUpdate 
+      <PasswordUpdate
         open={openPasswordDialog}
         onClose={handleClosePasswordDialog}
         showPassword={showPassword}
-        handleClickShowPassword={handleClickShowPassword} 
+        handleClickShowPassword={handleClickShowPassword}
       />
     </>
   );

@@ -7,62 +7,17 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import ja from 'date-fns/locale/ja';
 import Holidays from 'date-holidays';
+import { AttendanceData, GetAttendanceData, PostAttendanceData, Initialtime } from '../../types/index';
+import AttendanceDetails from '@/pages/components/AttendanceDetails';
+import AttendanceTable from '@/pages/components/AttendanceTable';
 
-// 出勤簿の各日のデータ構造を定義
-interface AttendanceData {
-  attendanceid: number | null; // 勤怠情報ID（初期はnullになっており後でデータベースに保存される際に割り当てられる）
-  day: number; // 日付
-  weekday: string; // 曜日
-  starttime: Date | null; // 始業時間
-  endtime: Date | null; // 終業時間
-  breaktime: Date | null; // 休憩時間
-  workinghours: Date | null; // 所定内労働時間
-  earlyhours: Date | null; // 早出時間
-  overtimehours: Date | null; // 残業時間
-  nightandholidayworks: Date | null; // 深夜および休日出勤時間
-  summary: string; // 摘要
-  memo: string; // 備考
-}
-
-interface GetAttendanceData {
-  attendanceid: number | null; // 勤怠情報ID（初期はnullになっており後でデータベースに保存される際に割り当てられる）
-  day: number; // 日付
-  starttime: string; // 始業時間
-  endtime: string; // 終業時間
-  breaktime: string; // 休憩時間
-  workinghours: string; // 所定内労働時間
-  earlyhours: string; // 早出時間
-  overtimehours: string; // 残業時間
-  nightandholidayworks: string; // 深夜および休日出勤時間
-  summary: string; // 摘要
-  memo: string; // 備考
-}
-
-interface PostAttendanceData {
-  year: string; // 年
-  month: string; // 月
-  day: string; // 日
-  starttime: string | null; // 始業時間
-  endtime: string | null; // 終業時間
-  breaktime: string | null; // 休憩時間
-  workinghours: string | null; // 所定内労働時間
-  earlyhours: string | null; // 早出時間
-  overtimehours: string | null; // 残業時間
-  nightandholidayworks: string | null; // 深夜および休日出勤時間
-  summary: string; // 摘要
-  memo: string; // 備考
-}
-interface Initialtime {
-  selectedStartTime: Date | null;
-  selectedEndTime: Date | null;
-  selectedBreakTime: Date | null;
-}
 const parseTime = (timeString: string, year: number, month: number, day: number): Date => {
   const [hours, minutes] = timeString.split(':').map(Number);
   const date = new Date(year, month - 1, day, hours, minutes);
 
   return date;
 };
+
 const convertToPostAttendanceData = (data: AttendanceData[], year: string, month: string): PostAttendanceData[] => {
   return data.map(dayData => ({
     year,
@@ -87,69 +42,48 @@ const formatTime = (date: Date | null): string => {
   return `${hours}:${minutes}`;
 };
 
-// 時間を分単位に変換する関数
-const convertTHouerToMinutes = (hours: number, minutes: number): number => {
-  return hours * 60 + minutes;
-};
+const calculateWorkingHours = (initialTime: Initialtime): string => {
 
-const calculateTotalWorkingHours = (data: AttendanceData[]) => {
-  let total = 0;
-  for (let i = 0; i < data.length; i++) {
-    const item = data[i];
-    if (item.workinghours) {
-      const hours = item.workinghours.getHours();
-      const minutes = item.workinghours.getMinutes();
-      total += convertTHouerToMinutes(hours, minutes);
-    }
+  if (!initialTime.selectedStartTime || !initialTime.selectedEndTime || !initialTime.selectedBreakTime) {
+    return "00:00";
   }
-  return total;
+
+  // 開始時刻と終了時刻と休憩時間の時間と分を取得
+  const startHour = initialTime.selectedStartTime.getHours();
+  const startMinutes = initialTime.selectedStartTime.getMinutes();
+  const endHour = initialTime.selectedEndTime.getHours();
+  const endMinutes = initialTime.selectedEndTime.getMinutes();
+  const breakHour = initialTime.selectedBreakTime.getHours();
+  const breakMinutes = initialTime.selectedBreakTime.getMinutes();
+
+  // 分単位に変換
+  const startInMinutes = startHour * 60 + startMinutes;
+  const endInMinutes = endHour * 60 + endMinutes;
+  const breakInMinutes = breakHour * 60 + breakMinutes;
+
+  // 勤務時間を計算
+  const workkingMinutes = endInMinutes - startInMinutes - breakInMinutes;
+
+  // 分単位の勤務時間を時間形式の文字列に変換
+  const hours = Math.floor(workkingMinutes / 60);
+  const minutes = workkingMinutes % 60;
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 };
 
-const calculateTotalEarlyHours = (data: AttendanceData[]): number => {
-  let total = 0;
-  for (let i = 0; i < data.length; i++) {
-    const item = data[i];
-    if (item.earlyhours) {
-      const hours = item.earlyhours.getHours();
-      const minutes = item.earlyhours.getMinutes();
-      total += convertTHouerToMinutes(hours, minutes);
-    }
-  }
-  return total;
+const timeStringToDate = (timeString: string): Date => {
+  const time = timeString.split(':');
+
+  // 時間と分を抽出
+  const hours = Number(time[0]);
+  const minutes = Number(time[1]);
+
+  // 現在の日付を基準に時間と分を設定
+  const now = new Date();
+  const date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
+
+  return date;
 };
 
-const calculateTotalOvertimeHours = (data: AttendanceData[]): number => {
-  let total = 0;
-  for (let i = 0; i < data.length; i++) {
-    const item = data[i];
-    if (item.overtimehours) {
-      const hours = item.overtimehours.getHours();
-      const minutes = item.overtimehours.getMinutes();
-      total += convertTHouerToMinutes(hours, minutes);
-    }
-  }
-  return total;
-};
-
-const calculateTotalNightAndHolidayWorks = (data: AttendanceData[]): number => {
-  let total = 0;
-  for (let i = 0; i < data.length; i++) {
-    const item = data[i];
-    if (item.nightandholidayworks) {
-      const hours = item.nightandholidayworks.getHours();
-      const minutes = item.nightandholidayworks.getMinutes();
-      total += convertTHouerToMinutes(hours, minutes);
-    }
-  }
-  return total;
-};
-
-// 分単位を時間形式に変換する関数
-const formatMinutesToHour = (minutes: number) => {
-  const hours = Math.floor(minutes / 60);
-  const mins = minutes % 60;
-  return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
-};
 
 const Attendance = () => {
   const router = useRouter();
@@ -205,6 +139,9 @@ const Attendance = () => {
           nightandholidayworks: null,
           summary: '',
           memo: '',
+          map: function (arg0: (item: any) => any): AttendanceData {
+            throw new Error('Function not implemented.');
+          }
         };
 
         // データがある場合更新する
@@ -233,97 +170,6 @@ const Attendance = () => {
     }
   };
 
-  const handleStartTimeChange = (day: number, time: Date | null) => {
-    setAttendanceData(prevData =>
-      prevData.map(item =>
-        item.day === day ? { ...item, starttime: time } : item
-      )
-    );
-  };
-
-  const handleEndTimeChange = (day: number, time: Date | null) => {
-    setAttendanceData(prevData =>
-      prevData.map(item =>
-        item.day === day ? { ...item, endtime: time } : item
-      )
-    );
-  };
-
-  const handleBreakTimeChange = (day: number, time: Date | null) => {
-    setAttendanceData(prevData =>
-      prevData.map(item =>
-        item.day === day ? { ...item, breaktime: time } : item
-      )
-    );
-  };
-
-  const handleWorkingHoursChange = (day: number, time: Date | null) => {
-    setAttendanceData(prevData =>
-      prevData.map(item =>
-        item.day === day ? { ...item, workinghours: time } : item
-      )
-    );
-  };
-
-  const handleEarlyHoursChange = (day: number, time: Date | null) => {
-    setAttendanceData(prevData =>
-      prevData.map(item =>
-        item.day === day ? { ...item, earlyhours: time } : item
-      )
-    );
-  };
-
-  const handleOvertimeHoursChange = (day: number, time: Date | null) => {
-    setAttendanceData(prevData =>
-      prevData.map(item =>
-        item.day === day ? { ...item, overtimehours: time } : item
-      )
-    );
-  };
-
-  const handleNightAndHolidayWorksChange = (day: number, time: Date | null) => {
-    setAttendanceData(prevData =>
-      prevData.map(item =>
-        item.day === day ? { ...item, nightandholidayworks: time } : item
-      )
-    );
-  };
-
-  const handleSummaryChange = (day: number, event: SelectChangeEvent<string>) => {
-    setAttendanceData(prevData =>
-      prevData.map(item =>
-        item.day === day ? { ...item, summary: event.target.value } : item
-      )
-    );
-  };
-
-  const handleMemoChange = (day: number, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setAttendanceData(prevData =>
-      prevData.map(item =>
-        item.day === day ? { ...item, memo: event.target.value } : item
-      )
-    );
-  };
-
-  const [paidLeaveCount, setPaidLeaveCount] = useState(0);
-  const [absentCount, setAbsentCount] = useState(0);
-  const [specialLeaveCount, setSpecialLeaveCount] = useState(0);
-
-  // attendanceDataが更新されるたびにカウントを更新
-  useEffect(() => {
-    const updateCounts = () => {
-      const workDay = attendanceData.filter(item => item.summary === '').length;
-      const paidLeave = attendanceData.filter(item => item.summary === '有給').length;
-      const absent = attendanceData.filter(item => item.summary === '欠勤').length;
-      const specialLeave = attendanceData.filter(item => item.summary === '特休').length;
-
-      setPaidLeaveCount(paidLeave);
-      setAbsentCount(absent);
-      setSpecialLeaveCount(specialLeave);
-    };
-    updateCounts();
-  }, [attendanceData]);
-
   const handleSubmit = async () => {
     try {
       const formattedData = convertToPostAttendanceData(attendanceData, year as string, month as string);
@@ -346,65 +192,93 @@ const Attendance = () => {
     }
   };
 
-// 所定勤務日数を計算する関数
-const calculateScheduledWorkDays = (year: string, month: string): number => {
-  const hd = new Holidays('JP');
-  const holidays = hd.getHolidays(parseInt(year));
-
-  // 指定月の祝日だけを抽出し、DD形式で返す
-  const holidaysInMonth = holidays
-    .filter(holiday => new Date(holiday.date).getMonth() + 1 === parseInt(month))
-    .map(holiday => {
-      const date = new Date(holiday.date);
-      // DD形式に変換
-      return String(date.getDate()).padStart(2, '0');
-    });
-
-  console.log(holidaysInMonth);
-
-  const totalDays = new Date(parseInt(year), parseInt(month), 0).getDate();
-  let workDays = 0;
-
-  for (let day = 1; day <= totalDays; day++) {
-    const date = new Date(parseInt(year), parseInt(month) - 1, day);
-    const dayOfWeek = date.getDay();
-    // DD形式に変換
-    const dateString = String(date.getDate()).padStart(2, '0');
-    console.log(dateString);
-
-    // 土日を除外
-    if (dayOfWeek === 0 || dayOfWeek === 6) continue;
-
-    // 祝日を除外
-    if (holidaysInMonth.includes(dateString)) continue;
-
-    workDays++;
-  }
-
-  return workDays;
-};
-  // 当月勤務日数を計算する関数
-  const calculateWorkDays = (year: string, month: string, holidays: string, absences: number[], paidLeaves: number[], specialLeaves: number[]) => {
-    const scheduledDays = calculateScheduledWorkDays(year, month);
-
-    // 当月の出勤日数を計算
-    let workDays = scheduledDays;
-
-    // 出勤しなかった日数を引く
-    const allAbsences = [...absences, ...paidLeaves, ...specialLeaves];
-    workDays -= allAbsences.length;
-
-    return workDays;
+  const handleSelectedStartTime = (value: Date | null) => {
+    setInitialTime((prevTime) => ({
+      ...prevTime,
+      selectedStartTime: value,
+    }));
   };
 
-  const handleselectedStartTime = () => {
-    setInitialTime
+  const handleSelectedEndTime = (value: Date | null) => {
+    setInitialTime((prevTime) => ({
+      ...prevTime,
+      selectedEndTime: value,
+    }));
   };
-  const handleselectedEndTime = () => {
-    setInitialTime
+
+  const handleSelectedBreakTime = (value: Date | null) => {
+    setInitialTime((prevTime) => ({
+      ...prevTime,
+      selectedBreakTime: value,
+    }));
   };
-  const handleselectedBreakTime = () => {
-    setInitialTime
+
+  const isWeekend = (date: Date) => {
+    const day = date.getDay();
+    return day === 0 || day === 6; // 日曜日 (0) または 土曜日 (6)
+  };
+  // 指定された年と月の祝日を取得する関数
+  const getHolidaysInMonth = (year: string, month: string): number[] => {
+    const hd = new Holidays('JP'); // 日本の祝日データを扱うオブジェクトを作成
+    const holidays = hd.getHolidays(parseInt(year)); // 指定された年の全ての祝日を取得
+
+    const holidaysInMonth: number[] = []; // 指定された月の祝日の日付を保存するための配列
+
+    // 祝日リストの長さを取得
+    const length = holidays.length;
+
+    // 祝日リストを通常のforループで処理
+    for (let i = 0; i < length; i++) {
+      const holiday = holidays[i]; // 現在の祝日データを取得
+      const holidayDate = new Date(holiday.date); // 祝日の日付をDateオブジェクトに変換
+      const holidayMonth = holidayDate.getMonth() + 1; // 月を取得（0が1月なので、+1する）
+
+      // 祝日が指定された月かどうかを確認
+      if (holidayMonth === parseInt(month)) {
+        const day = holidayDate.getDate(); // 祝日の日にちを取得
+        holidaysInMonth.push(day); // 祝日の日にちを配列に追加
+      }
+    }
+
+    return holidaysInMonth; // 指定された月の祝日の日にちを含む配列を返す
+  };
+
+  const handleInput = () => {
+    const holidaysInMonth = getHolidaysInMonth(year as string, month as string);
+    setAttendanceData(attendanceData.map(item => {
+      const weekday = new Date(parseInt(year as string), parseInt(month as string) - 1, item.day);
+      const isHoliday = holidaysInMonth.includes(item.day); // 祝日かどうかの判定
+
+      if (isWeekend(weekday) || isHoliday) {
+        // 土日または祝日
+        return {
+          ...item,
+          starttime: new Date(new Date().setHours(0, 0)),
+          endtime: new Date(new Date().setHours(0, 0)),
+          breaktime: new Date(new Date().setHours(0, 0)),
+          workinghours: new Date(new Date().setHours(0, 0)),
+          earlyhours: new Date(new Date().setHours(0, 0)),
+          overtimehours: new Date(new Date().setHours(0, 0)),
+          nightandholidayworks: new Date(new Date().setHours(0, 0)),
+          summary: '',
+          memo: '',
+        };
+      }
+
+      // 平日
+      return {
+        ...item,
+        starttime: initialTime.selectedStartTime,
+        endtime: initialTime.selectedEndTime,
+        breaktime: initialTime.selectedBreakTime,
+        workinghours: timeStringToDate(calculateWorkingHours(initialTime)),
+        earlyhours: new Date(new Date().setHours(0, 0)),
+        overtimehours: new Date(new Date().setHours(0, 0)),
+        nightandholidayworks: new Date(new Date().setHours(0, 0)),
+        summary: '',
+        memo: '',
+      };
+    }));
   };
 
   return (
@@ -427,13 +301,13 @@ const calculateScheduledWorkDays = (year: string, month: string): number => {
               <TimePicker
                 label="始業時間"
                 value={initialTime.selectedStartTime}
-                onChange={handleselectedStartTime}
+                onChange={handleSelectedStartTime}
               />
               <Typography variant="body1" style={{ margin: '10px' }}>〜</Typography>
               <TimePicker
                 label="終業時間"
                 value={initialTime.selectedEndTime}
-                onChange={handleselectedEndTime}
+                onChange={handleSelectedEndTime}
               />
             </Grid>
           </Grid>
@@ -441,172 +315,26 @@ const calculateScheduledWorkDays = (year: string, month: string): number => {
             <TimePicker
               label="休憩時間"
               value={initialTime.selectedBreakTime}
-              onChange={handleselectedBreakTime}
+              onChange={handleSelectedBreakTime}
             />
           </Grid>
           <Grid item xs={4} container justifyContent="flex-end">
-            <Button variant="contained">自動入力</Button>
+            <Button variant="contained" onClick={handleInput}>自動入力</Button>
           </Grid>
         </Grid>
         <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ fontWeight: 'bold' }}>日</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>曜日</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>始業時間</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>終業時間</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>休憩＋中抜け</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>所定内</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>早出</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>残業</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>深夜/休出</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>摘要</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>備考</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {attendanceData.map((data) => (
-                <TableRow key={data.day}>
-                  <TableCell>{data.day}</TableCell>
-                  <TableCell>{data.weekday}</TableCell>
-                  <TableCell >
-                    <Box sx={{ width: '120px' }}>
-                      <TimePicker
-                        label="始業時間"
-                        value={data.starttime}
-                        onChange={(time) => handleStartTimeChange(data.day, time)}
-                      />
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    <Box sx={{ width: '120px' }}>
-                      <TimePicker
-                        label="終業時間"
-                        value={data.endtime}
-                        onChange={(time) => handleEndTimeChange(data.day, time)}
-                      />
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    <Box sx={{ width: '120px' }}>
-                      <TimePicker
-                        label="休憩＋中抜け"
-                        value={data.breaktime}
-                        onChange={(time) => handleBreakTimeChange(data.day, time)}
-                      />
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    <Box sx={{ width: '120px' }}>
-                      <TimePicker
-                        label="所定内"
-                        value={data.workinghours}
-                        onChange={(time) => handleWorkingHoursChange(data.day, time)}
-                      />
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    <Box sx={{ width: '120px' }}>
-                      <TimePicker
-                        label="早出"
-                        value={data.earlyhours}
-                        onChange={(time) => handleEarlyHoursChange(data.day, time)}
-                      />
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    <Box sx={{ width: '120px' }}>
-                      <TimePicker
-                        label="残業"
-                        value={data.overtimehours}
-                        onChange={(time) => handleOvertimeHoursChange(data.day, time)}
-                      />
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    <Box sx={{ width: '120px' }}>
-                      <TimePicker
-                        label="深夜/休出"
-                        value={data.nightandholidayworks}
-                        onChange={(time) => handleNightAndHolidayWorksChange(data.day, time)}
-                      />
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    <FormControl fullWidth>
-                      <Select
-                        value={data.summary}
-                        onChange={(event) => handleSummaryChange(data.day, event)}
-                      >
-                        <MenuItem value="" >選択なし</MenuItem>
-                        <MenuItem value="有給">有給</MenuItem>
-                        <MenuItem value="欠勤">欠勤</MenuItem>
-                        <MenuItem value="特休">特休</MenuItem>
-                        <MenuItem value="早退">早退</MenuItem>
-                        <MenuItem value="遅刻">遅刻</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </TableCell>
-                  <TableCell>
-                    <TextField
-                      value={data.memo}
-                      sx={{ width: '300px' }}
-                      multiline
-                      onChange={(event) => handleMemoChange(data.day, event)}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
-              <TableRow>
-                <TableCell colSpan={5} sx={{ fontWeight: 'bold', textAlign: 'center', backgroundColor: '#007bff', color: 'white' }}>合計</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-                  所定内:{formatMinutesToHour(calculateTotalWorkingHours(attendanceData))}
-                </TableCell>
-                <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-                  早出:{formatMinutesToHour(calculateTotalEarlyHours(attendanceData))}
-                </TableCell>
-                <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-                  残業:{formatMinutesToHour(calculateTotalOvertimeHours(attendanceData))}
-                </TableCell>
-                <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-                  深夜/休出:{formatMinutesToHour(calculateTotalNightAndHolidayWorks(attendanceData))}
-                </TableCell>
-                <TableCell colSpan={2}></TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+          <AttendanceTable
+            attendanceData={attendanceData}
+            setAttendanceData={setAttendanceData}
+          />
         </TableContainer>
-
-        <Table sx={{ width: '800px', marginTop: '20px', marginLeft: '20px' }}>
-          <TableBody >
-            <TableRow >
-              <TableCell sx={{ fontWeight: 'bold', }}>
-                所定勤務日数: {calculateScheduledWorkDays(year as string, month as string)}日
-              </TableCell>
-              <TableCell sx={{ fontWeight: 'bold', }}>
-                所定勤務時間: 時間
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell sx={{ fontWeight: 'bold', }}>
-                当月勤務日数: 日
-              </TableCell>
-              <TableCell sx={{ fontWeight: 'bold', }}>
-                有給取得日数: {paidLeaveCount}日
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell sx={{ fontWeight: 'bold', }}>
-                当月欠勤日数: {absentCount}日
-              </TableCell>
-              <TableCell sx={{ fontWeight: 'bold', }}>
-                特別休暇日数: {specialLeaveCount}日
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-
+        <AttendanceDetails
+          year={year as string}
+          month={month as string}
+          initialTime={initialTime}
+          calculateWorkingHours={calculateWorkingHours}
+          attendanceData={attendanceData}
+        />
         <Grid container justifyContent="center" style={{ marginTop: '30px' }} alignItems="center">
           <Grid item>
             <Button variant="contained" onClick={handleSubmit}>

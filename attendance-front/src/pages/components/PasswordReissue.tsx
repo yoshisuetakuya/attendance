@@ -1,20 +1,12 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
-
-interface PasswordReissueProps {
-    open: boolean;
-    onClose: () => void;
-}
-
-interface FormValues {
-    email: string;
-}
+import { PasswordReissueProps,ReissueFormValues  } from "../types/index";
 
 const PasswordReissue = ({ open, onClose }: PasswordReissueProps) => {
-    const { control, handleSubmit, formState: { errors } } = useForm<FormValues>({ defaultValues: { email: ""}});
+    const { control, handleSubmit, formState: { errors } } = useForm<ReissueFormValues>({ defaultValues: { email: ""}});
 
-    const onSubmit = async (data: FormValues) => {
+    const onSubmit = async (data: ReissueFormValues) => {
         try {
             const response = await fetch("http://localhost:8080/reissue", {
                 method: "POST",

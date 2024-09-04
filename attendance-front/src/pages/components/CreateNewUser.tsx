@@ -12,19 +12,7 @@ import {
   InputAdornment,
   TextField,
 } from "@mui/material";
-
-interface CreateNewUserProps {
-  open: boolean;
-  onClose: () => void;
-  showPassword: boolean;
-  handleClickShowPassword: () => void;
-}
-
-interface FormValues {
-  name: string;
-  email: string;
-  password: string;
-}
+import { NewFormValues, CreateNewUserProps } from "../types/index";
 
 const CreateNewUser = ({
   open,
@@ -32,7 +20,7 @@ const CreateNewUser = ({
   showPassword,
   handleClickShowPassword,
 }: CreateNewUserProps) => {
-  const { control, handleSubmit, formState: { errors } } = useForm<FormValues>({
+  const { control, handleSubmit, formState: { errors } } = useForm<NewFormValues>({
     defaultValues: {
       name: "",
       email: "",
@@ -40,7 +28,7 @@ const CreateNewUser = ({
     }
   });
 
-  const onSubmit = async (data: FormValues) => {
+  const onSubmit = async (data: NewFormValues) => {
     try {
       // ユーザー登録のための POST リクエスト
       const response = await fetch("http://localhost:8080/createUser", {
