@@ -1,12 +1,9 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow, Box, Select, MenuItem, FormControl, TextField, SelectChangeEvent } from '@mui/material';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { AttendanceData } from '../types/index';
+import { AttendanceData, AttendanceTableProps } from '../types/index';
 
-interface AttendanceTableProps {
-    attendanceData: AttendanceData[];
-    setAttendanceData: React.Dispatch<React.SetStateAction<AttendanceData[]>>;
-}
+
 const AttendanceTable =  ({attendanceData, setAttendanceData,}: AttendanceTableProps) => {
     const handleStartTimeChange = (day: number, time: Date | null) => {
         setAttendanceData(prevData =>

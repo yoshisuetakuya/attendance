@@ -98,6 +98,11 @@ export interface AttendanceDetailsProps {
   calculateWorkingHours: (initialTime: Initialtime) => string;
   attendanceData: AttendanceData[];
 }
+// 勤怠テーブルの型定義
+interface AttendanceTableProps {
+  attendanceData: AttendanceData[];
+  setAttendanceData: React.Dispatch<React.SetStateAction<AttendanceData[]>>;
+}
 
 
 
