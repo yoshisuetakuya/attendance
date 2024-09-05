@@ -13,7 +13,7 @@ import {
   TextField,
 } from "@mui/material";
 import router from "next/router";
-import { PasswordUpdateProps, UpdateFormValues } from "@/pages/types/index";
+import { PasswordUpdateProps, UpdateFormValues } from "@/types";
 
 
 const PasswordUpdate = ({

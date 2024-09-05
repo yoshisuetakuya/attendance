@@ -1,16 +1,122 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Button,  Grid, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Button, Grid, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import Header from '@/components/Header';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import ja from 'date-fns/locale/ja';
 import Holidays from 'date-holidays';
-import { AttendanceData, GetAttendanceData, PostAttendanceData, Initialtime } from '../../types/index';
+import { AttendanceData, GetAttendanceData, PostAttendanceData, Initialtime } from '@/types';
 import AttendanceDetails from '@/components/AttendanceDetails';
 import AttendanceRow from '@/components/AttendanceRow';
 
+const calculateWorkingHours = (initialTime: Initialtime): string => {
+  if (!initialTime.selectedStartTime || !initialTime.selectedEndTime || !initialTime.selectedBreakTime) {
+    return "00:00";
+  }
+
+  // 開始時刻と終了時刻と休憩時間の時間と分を取得
+  const startHour = initialTime.selectedStartTime.getHours();
+  const startMinutes = initialTime.selectedStartTime.getMinutes();
+  const endHour = initialTime.selectedEndTime.getHours();
+  const endMinutes = initialTime.selectedEndTime.getMinutes();
+  const breakHour = initialTime.selectedBreakTime.getHours();
+  const breakMinutes = initialTime.selectedBreakTime.getMinutes();
+
+  // 分単位に変換
+  const startInMinutes = startHour * 60 + startMinutes;
+  const endInMinutes = endHour * 60 + endMinutes;
+  const breakInMinutes = breakHour * 60 + breakMinutes;
+
+  // 勤務時間を計算
+  const workkingMinutes = endInMinutes - startInMinutes - breakInMinutes;
+
+  // 分単位の勤務時間を時間形式の文字列に変換
+  const hours = Math.floor(workkingMinutes / 60);
+  const minutes = workkingMinutes % 60;
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+};
+
+const calculateTotalWorkingHours = (data: AttendanceData[]): string => {
+  let totalMinutes = 0;
+
+  for (let i = 0; i < data.length; i++) {
+    const item = data[i]; // 配列の要素を代入
+
+    if (item.workinghours) { // item.workinghours が存在する場合に処理
+      const hours = item.workinghours.getHours(); // 時間を取得
+      const minutes = item.workinghours.getMinutes(); // 分を取得
+      totalMinutes += hours * 60 + minutes; // 合計分に追加
+    }
+  }
+
+  // 合計分を時間形式に変換
+  const hours = Math.floor(totalMinutes / 60);
+  const mins = totalMinutes % 60;
+
+  return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+};
+
+const calculateTotalEarlyHours = (data: AttendanceData[]): string => {
+  let totalMinutes = 0;
+
+  for (let i = 0; i < data.length; i++) {
+    const item = data[i]; // 配列の要素を代入
+
+    if (item.earlyhours) { // item.earlyhours が存在する場合に処理
+      const hours = item.earlyhours.getHours(); // 時間を取得
+      const minutes = item.earlyhours.getMinutes(); // 分を取得
+      totalMinutes += hours * 60 + minutes; // 合計分に追加
+    }
+  }
+
+  // 合計分を時間形式に変換
+  const hours = Math.floor(totalMinutes / 60);
+  const mins = totalMinutes % 60;
+
+  return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+};
+
+const calculateTotalOvertimeHours = (data: AttendanceData[]): string => {
+  let totalMinutes = 0;
+
+  for (let i = 0; i < data.length; i++) {
+    const item = data[i]; // 配列の要素を代入
+
+    if (item.overtimehours) { // item.overtimehours が存在する場合に処理
+      const hours = item.overtimehours.getHours(); // 時間を取得
+      const minutes = item.overtimehours.getMinutes(); // 分を取得
+      totalMinutes += hours * 60 + minutes; // 合計分に追加
+    }
+  }
+
+  // 合計分を時間形式に変換
+  const hours = Math.floor(totalMinutes / 60);
+  const mins = totalMinutes % 60;
+
+  return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+};
+
+const calculateTotalNightAndHolidayWorks = (data: AttendanceData[]): string => {
+  let totalMinutes = 0;
+
+  for (let i = 0; i < data.length; i++) {
+    const item = data[i]; // 配列の要素を代入
+
+    if (item.nightandholidayworks) { // item.nightandholidayworks が存在する場合に処理
+      const hours = item.nightandholidayworks.getHours(); // 時間を取得
+      const minutes = item.nightandholidayworks.getMinutes(); // 分を取得
+      totalMinutes += hours * 60 + minutes; // 合計分に追加
+    }
+  }
+
+  // 合計分を時間形式に変換
+  const hours = Math.floor(totalMinutes / 60);
+  const mins = totalMinutes % 60;
+
+  return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+};
 const parseTime = (timeString: string, year: number, month: number, day: number): Date => {
   const [hours, minutes] = timeString.split(':').map(Number);
   const date = new Date(year, month - 1, day, hours, minutes);
@@ -42,49 +148,6 @@ const formatTime = (date: Date | null): string => {
   return `${hours}:${minutes}`;
 };
 
-const calculateWorkingHours = (initialTime: Initialtime): string => {
-
-  if (!initialTime.selectedStartTime || !initialTime.selectedEndTime || !initialTime.selectedBreakTime) {
-    return "00:00";
-  }
-
-  // 開始時刻と終了時刻と休憩時間の時間と分を取得
-  const startHour = initialTime.selectedStartTime.getHours();
-  const startMinutes = initialTime.selectedStartTime.getMinutes();
-  const endHour = initialTime.selectedEndTime.getHours();
-  const endMinutes = initialTime.selectedEndTime.getMinutes();
-  const breakHour = initialTime.selectedBreakTime.getHours();
-  const breakMinutes = initialTime.selectedBreakTime.getMinutes();
-
-  // 分単位に変換
-  const startInMinutes = startHour * 60 + startMinutes;
-  const endInMinutes = endHour * 60 + endMinutes;
-  const breakInMinutes = breakHour * 60 + breakMinutes;
-
-  // 勤務時間を計算
-  const workkingMinutes = endInMinutes - startInMinutes - breakInMinutes;
-
-  // 分単位の勤務時間を時間形式の文字列に変換
-  const hours = Math.floor(workkingMinutes / 60);
-  const minutes = workkingMinutes % 60;
-  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-};
-
-const timeStringToDate = (timeString: string): Date => {
-  const time = timeString.split(':');
-
-  // 時間と分を抽出
-  const hours = Number(time[0]);
-  const minutes = Number(time[1]);
-
-  // 現在の日付を基準に時間と分を設定
-  const now = new Date();
-  const date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
-
-  return date;
-};
-
-
 const Attendance = () => {
   const router = useRouter();
   const { year, month } = router.query; // URLから年と月を取得
@@ -115,13 +178,13 @@ const Attendance = () => {
 
       // デフォルトデータを先に設定する
       // 月の日数を計算（yearとmonthは文字列なのでparseIntで整数に変換）
-      const daysInMonth = new Date(parseInt(year as string), parseInt(month as string), 0).getDate();
+      const daysInMonth = new Date(parseInt(year), parseInt(month), 0).getDate();
       const defaultData: AttendanceData[] = [];
       const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
 
       // 月の日数分だけ出勤簿データを回す
       for (let day = 1; day <= daysInMonth; day++) {
-        const date = new Date(parseInt(year as string), parseInt(month as string) - 1, day);
+        const date = new Date(parseInt(year), parseInt(month) - 1, day);
         const weekdayIndex = date.getDay(); // 日付から曜日のインデックスを取得
         const weekday = weekdays[weekdayIndex]; // 曜日のインデックスを使って曜日を取得
 
@@ -139,15 +202,10 @@ const Attendance = () => {
           nightandholidayworks: null,
           summary: '',
           memo: '',
-          map: function (arg0: (item: any) => any): AttendanceData {
-            throw new Error('Function not implemented.');
-          }
         };
 
         // データがある場合更新する
-        const existingData = data.find((data: GetAttendanceData) => {
-          return data.day === day
-        });
+        const existingData = data.find((data: GetAttendanceData) => data.day === day);
 
         if (existingData) {
           detileDayData.starttime = existingData.starttime ? parseTime(existingData.starttime, parseInt(year), parseInt(month), day) : null;
@@ -217,6 +275,7 @@ const Attendance = () => {
     const day = date.getDay();
     return day === 0 || day === 6; // 日曜日 (0) または 土曜日 (6)
   };
+
   // 指定された年と月の祝日を取得する関数
   const getHolidaysInMonth = (year: string, month: string): number[] => {
     const hd = new Holidays('JP'); // 日本の祝日データを扱うオブジェクトを作成
@@ -241,6 +300,20 @@ const Attendance = () => {
     }
 
     return holidaysInMonth; // 指定された月の祝日の日にちを含む配列を返す
+  };
+
+  const timeStringToDate = (timeString: string): Date => {
+    const time = timeString.split(':');
+
+    // 時間と分を抽出
+    const hours = Number(time[0]);
+    const minutes = Number(time[1]);
+
+    // 現在の日付を基準に時間と分を設定
+    const now = new Date();
+    const date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
+
+    return date;
   };
 
   const handleInput = () => {
@@ -352,86 +425,6 @@ const Attendance = () => {
       )
     );
   }, []);
-
-  const calculateTotalWorkingHours = (data: AttendanceData[]): string => {
-    let totalMinutes = 0;
-
-    for (let i = 0; i < data.length; i++) {
-      const item = data[i]; // 配列の要素を代入
-
-      if (item.workinghours) { // item.workinghours が存在する場合に処理
-        const hours = item.workinghours.getHours(); // 時間を取得
-        const minutes = item.workinghours.getMinutes(); // 分を取得
-        totalMinutes += hours * 60 + minutes; // 合計分に追加
-      }
-    }
-
-    // 合計分を時間形式に変換
-    const hours = Math.floor(totalMinutes / 60);
-    const mins = totalMinutes % 60;
-
-    return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
-  };
-
-  const calculateTotalEarlyHours = (data: AttendanceData[]): string => {
-    let totalMinutes = 0;
-
-    for (let i = 0; i < data.length; i++) {
-      const item = data[i]; // 配列の要素を代入
-
-      if (item.earlyhours) { // item.earlyhours が存在する場合に処理
-        const hours = item.earlyhours.getHours(); // 時間を取得
-        const minutes = item.earlyhours.getMinutes(); // 分を取得
-        totalMinutes += hours * 60 + minutes; // 合計分に追加
-      }
-    }
-
-    // 合計分を時間形式に変換
-    const hours = Math.floor(totalMinutes / 60);
-    const mins = totalMinutes % 60;
-
-    return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
-  };
-
-  const calculateTotalOvertimeHours = (data: AttendanceData[]): string => {
-    let totalMinutes = 0;
-
-    for (let i = 0; i < data.length; i++) {
-      const item = data[i]; // 配列の要素を代入
-
-      if (item.overtimehours) { // item.overtimehours が存在する場合に処理
-        const hours = item.overtimehours.getHours(); // 時間を取得
-        const minutes = item.overtimehours.getMinutes(); // 分を取得
-        totalMinutes += hours * 60 + minutes; // 合計分に追加
-      }
-    }
-
-    // 合計分を時間形式に変換
-    const hours = Math.floor(totalMinutes / 60);
-    const mins = totalMinutes % 60;
-
-    return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
-  };
-
-  const calculateTotalNightAndHolidayWorks = (data: AttendanceData[]): string => {
-    let totalMinutes = 0;
-
-    for (let i = 0; i < data.length; i++) {
-      const item = data[i]; // 配列の要素を代入
-
-      if (item.nightandholidayworks) { // item.nightandholidayworks が存在する場合に処理
-        const hours = item.nightandholidayworks.getHours(); // 時間を取得
-        const minutes = item.nightandholidayworks.getMinutes(); // 分を取得
-        totalMinutes += hours * 60 + minutes; // 合計分に追加
-      }
-    }
-
-    // 合計分を時間形式に変換
-    const hours = Math.floor(totalMinutes / 60);
-    const mins = totalMinutes % 60;
-
-    return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
-  };
 
   return (
     <>

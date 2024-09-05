@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { TableRow, TableCell, Box, TextField, FormControl, Select, MenuItem } from '@mui/material';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import {AttendanceRowProps} from '@/pages/types/index'
+import {AttendanceRowProps} from '@/types'
 
 const AttendanceRow = memo(function AttendanceRow({
     data,

@@ -41,7 +41,6 @@ export interface UpdateFormValues {
 export type SystemData = string[];
 // 出勤簿の各日のデータ構造を定義
 export interface AttendanceData {
-  map(arg0: (item: any) => any): AttendanceData;
   attendanceid: number | null; // 勤怠情報ID（初期はnullになっており後でデータベースに保存される際に割り当てられる）
   day: number; // 日付
   weekday: string; // 曜日

@@ -5,7 +5,7 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import { useEffect, useState } from 'react';
 import router from 'next/router';
 import PasswordUpdate from '@/components//PasswordUpdate';
-import { SystemData } from './types/index';
+import { SystemData } from '@/types';
 
 const MonthlyList = () => {
   const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];

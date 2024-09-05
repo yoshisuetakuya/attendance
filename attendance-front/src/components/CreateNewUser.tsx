@@ -12,7 +12,7 @@ import {
   InputAdornment,
   TextField,
 } from "@mui/material";
-import { NewFormValues, CreateNewUserProps } from "@/pages/types/index";
+import { NewFormValues, CreateNewUserProps } from "@/types";
 
 const CreateNewUser = ({
   open,

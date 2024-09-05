@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableRow } from '@mui/material';
-import { AttendanceDetailsProps } from '../pages/types/index';
+import { AttendanceDetailsProps } from '@/types';
 import Holidays from 'date-holidays';
 
 // 所定勤務日数を計算する関数
