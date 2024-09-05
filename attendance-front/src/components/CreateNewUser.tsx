@@ -12,134 +12,146 @@ import {
   InputAdornment,
   TextField,
 } from "@mui/material";
-import router from "next/router";
-import { PasswordUpdateProps, UpdateFormValues } from "../types/index";
+import { NewFormValues, CreateNewUserProps } from "@/pages/types/index";
 
-
-const PasswordUpdate = ({
+const CreateNewUser = ({
   open,
   onClose,
   showPassword,
   handleClickShowPassword,
-}: PasswordUpdateProps) => {
-  const { control, handleSubmit, formState: { errors } } = useForm<UpdateFormValues>({
+}: CreateNewUserProps) => {
+  const { control, handleSubmit, formState: { errors } } = useForm<NewFormValues>({
     defaultValues: {
-      currentPassword: "",
-      newPassword: "",
+      name: "",
+      email: "",
+      password: "",
     }
   });
 
-  const onSubmit = async (data: UpdateFormValues) => {
+  const onSubmit = async (data: NewFormValues) => {
     try {
       // ユーザー登録のための POST リクエスト
-      const response = await fetch("http://localhost:8080/updatePassword", {
+      const response = await fetch("http://localhost:8080/createUser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: 'include',
         body: JSON.stringify({
-          currentPassword: data.currentPassword,
-          newPassword: data.newPassword,
+          name: data.name,
+          email: data.email,
+          password: data.password,
         }),
       });
       if (response.status === 200) {
-        alert("パスワードの変更に成功しました");
+        alert("登録に成功しました");
         onClose();
-        router.push('/Login')
-      } else if (response.status === 404) {
-        alert("現在のパスワードが見つかりませんでした");
-
+      } else if (response.status === 409) {
+        alert("このメールアドレスはすでに登録されています");
       } else {
-        alert("パスワードの変更に失敗しました");
+        alert("ユーザー登録に失敗しました");
       }
     } catch {
-      alert("パスワードの変更中にエラーが発生しました");
+      alert("ユーザー登録中にエラーが発生しました");
     }
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>パスワードの変更</DialogTitle>
+      <DialogTitle>新規登録</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          現在のパスワードと新しいパスワードを入力してください
+          名前、メールアドレス、パスワードを入力してください。
         </DialogContentText>
 
         <Controller
-          name="currentPassword"
+          name="name"
           control={control}
           defaultValue=""
           rules={{
-            required: "パスワードは必須です",
-            pattern: {
-              value: /^[a-zA-Z0-9_-]{8,}$/,
-              message: "8文字以上の英数字で入力してください",
+            required: "名前は必須です",
+            maxLength: {
+              value: 50,
+              message: "名前は50文字以内で入力してください",
             },
           }}
           render={({ field }) => (
             <TextField
               {...field}
-              label="現在のパスワード"
+              label="名前"
               variant="outlined"
               margin="normal"
               fullWidth
-              type={showPassword ? 'text' : 'password'}
-              error={!!errors.currentPassword}
-              helperText={errors.currentPassword?.message}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={handleClickShowPassword} edge="end">
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          )}
-        />
-        <Controller
-          name="newPassword"
-          control={control}
-          defaultValue=""
-          rules={{
-            required: "パスワードは必須です",
-            pattern: {
-              value: /^[a-zA-Z0-9_-]{8,}$/,
-              message: "8文字以上の英数字で入力してください",
-            },
-          }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="新しいパスワード"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              type={showPassword ? 'text' : 'password'}
-              error={!!errors.newPassword}
-              helperText={errors.newPassword?.message}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={handleClickShowPassword} edge="end">
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
+              error={!!errors.name}
+              helperText={errors.name?.message}
             />
           )}
         />
 
+        <Controller
+          name="email"
+          control={control}
+          defaultValue=""
+          rules={{
+            required: "メールアドレスは必須です",
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: "無効なメールアドレス形式です",
+            },
+          }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="メールアドレス"
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              type="email"
+              error={!!errors.email}
+              helperText={errors.email?.message}
+            />
+          )}
+        />
+
+        <Controller
+          name="password"
+          control={control}
+          defaultValue=""
+          rules={{
+            required: "パスワードは必須です",
+            pattern: {
+              value: /^[a-zA-Z0-9_-]{8,}$/,
+              message: "8文字以上の英数字で入力してください",
+            },
+          }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="パスワード"
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              type={showPassword ? 'text' : 'password'}
+              error={!!errors.password}
+              helperText={errors.password?.message}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleClickShowPassword} edge="end">
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          )}
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>キャンセル</Button>
-        <Button onClick={handleSubmit(onSubmit)}>送信</Button>
+        <Button onClick={handleSubmit(onSubmit)}>登録</Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default PasswordUpdate;
+export default CreateNewUser;

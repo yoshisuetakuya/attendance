@@ -12,108 +12,62 @@ import {
   InputAdornment,
   TextField,
 } from "@mui/material";
-import { NewFormValues, CreateNewUserProps } from "../types/index";
+import router from "next/router";
+import { PasswordUpdateProps, UpdateFormValues } from "@/pages/types/index";
 
-const CreateNewUser = ({
+
+const PasswordUpdate = ({
   open,
   onClose,
   showPassword,
   handleClickShowPassword,
-}: CreateNewUserProps) => {
-  const { control, handleSubmit, formState: { errors } } = useForm<NewFormValues>({
+}: PasswordUpdateProps) => {
+  const { control, handleSubmit, formState: { errors } } = useForm<UpdateFormValues>({
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
+      currentPassword: "",
+      newPassword: "",
     }
   });
 
-  const onSubmit = async (data: NewFormValues) => {
+  const onSubmit = async (data: UpdateFormValues) => {
     try {
       // ユーザー登録のための POST リクエスト
-      const response = await fetch("http://localhost:8080/createUser", {
+      const response = await fetch("http://localhost:8080/updatePassword", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: 'include',
         body: JSON.stringify({
-          name: data.name,
-          email: data.email,
-          password: data.password,
+          currentPassword: data.currentPassword,
+          newPassword: data.newPassword,
         }),
       });
       if (response.status === 200) {
-        alert("登録に成功しました");
+        alert("パスワードの変更に成功しました");
         onClose();
-      } else if (response.status === 409) {
-        alert("このメールアドレスはすでに登録されています");
+        router.push('/Login')
+      } else if (response.status === 404) {
+        alert("現在のパスワードが見つかりませんでした");
+
       } else {
-        alert("ユーザー登録に失敗しました");
+        alert("パスワードの変更に失敗しました");
       }
     } catch {
-      alert("ユーザー登録中にエラーが発生しました");
+      alert("パスワードの変更中にエラーが発生しました");
     }
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>新規登録</DialogTitle>
+      <DialogTitle>パスワードの変更</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          名前、メールアドレス、パスワードを入力してください。
+          現在のパスワードと新しいパスワードを入力してください
         </DialogContentText>
 
         <Controller
-          name="name"
-          control={control}
-          defaultValue=""
-          rules={{
-            required: "名前は必須です",
-            maxLength: {
-              value: 50,
-              message: "名前は50文字以内で入力してください",
-            },
-          }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="名前"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              error={!!errors.name}
-              helperText={errors.name?.message}
-            />
-          )}
-        />
-
-        <Controller
-          name="email"
-          control={control}
-          defaultValue=""
-          rules={{
-            required: "メールアドレスは必須です",
-            pattern: {
-              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-              message: "無効なメールアドレス形式です",
-            },
-          }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="メールアドレス"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              type="email"
-              error={!!errors.email}
-              helperText={errors.email?.message}
-            />
-          )}
-        />
-
-        <Controller
-          name="password"
+          name="currentPassword"
           control={control}
           defaultValue=""
           rules={{
@@ -126,13 +80,13 @@ const CreateNewUser = ({
           render={({ field }) => (
             <TextField
               {...field}
-              label="パスワード"
+              label="現在のパスワード"
               variant="outlined"
               margin="normal"
               fullWidth
               type={showPassword ? 'text' : 'password'}
-              error={!!errors.password}
-              helperText={errors.password?.message}
+              error={!!errors.currentPassword}
+              helperText={errors.currentPassword?.message}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -145,13 +99,47 @@ const CreateNewUser = ({
             />
           )}
         />
+        <Controller
+          name="newPassword"
+          control={control}
+          defaultValue=""
+          rules={{
+            required: "パスワードは必須です",
+            pattern: {
+              value: /^[a-zA-Z0-9_-]{8,}$/,
+              message: "8文字以上の英数字で入力してください",
+            },
+          }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="新しいパスワード"
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              type={showPassword ? 'text' : 'password'}
+              error={!!errors.newPassword}
+              helperText={errors.newPassword?.message}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleClickShowPassword} edge="end">
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          )}
+        />
+
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>キャンセル</Button>
-        <Button onClick={handleSubmit(onSubmit)}>登録</Button>
+        <Button onClick={handleSubmit(onSubmit)}>送信</Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default CreateNewUser;
+export default PasswordUpdate;

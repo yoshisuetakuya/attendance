@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Button, FormControl, Grid, InputLabel, Link, List, ListItem, MenuItem, Select, Typography } from "@mui/material";
-import Header from "./components/Header";
+import Header from "@/components/Header";
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useEffect, useState } from 'react';
 import router from 'next/router';
-import PasswordUpdate from './components//PasswordUpdate';
+import PasswordUpdate from '@/components//PasswordUpdate';
 import { SystemData } from './types/index';
 
 const MonthlyList = () => {

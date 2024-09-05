@@ -13,10 +13,10 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
 import router from "next/router";
-import Header from "./components/Header";
+import Header from "@/components/Header";
 import { Controller, useForm } from "react-hook-form";
-import CreateNewUser from "./components/CreateNewUser";
-import PasswordReissue from "./components/PasswordReissue";
+import CreateNewUser from "@/components/CreateNewUser";
+import PasswordReissue from "@/components/PasswordReissue";
 import { FormValues } from "./types/index";
 
 

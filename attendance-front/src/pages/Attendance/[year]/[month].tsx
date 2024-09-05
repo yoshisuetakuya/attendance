@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Button, FormControl, Grid, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
-import Header from '@/pages/components/Header';
+import { Button,  Grid, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import Header from '@/components/Header';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import ja from 'date-fns/locale/ja';
 import Holidays from 'date-holidays';
 import { AttendanceData, GetAttendanceData, PostAttendanceData, Initialtime } from '../../types/index';
-import AttendanceDetails from '@/pages/components/AttendanceDetails';
-import AttendanceTable from '@/pages/components/AttendanceTable';
+import AttendanceDetails from '@/components/AttendanceDetails';
+import AttendanceRow from '@/components/AttendanceRow';
 
 const parseTime = (timeString: string, year: number, month: number, day: number): Date => {
   const [hours, minutes] = timeString.split(':').map(Number);
@@ -281,6 +281,158 @@ const Attendance = () => {
     }));
   };
 
+  const handleStartTimeChange = useCallback((day: number, time: Date | null) => {
+    setAttendanceData(prevData =>
+      prevData.map(data =>
+        data.day === day ? { ...data, starttime: time } : data
+      )
+    );
+  }, []);
+
+  const handleEndTimeChange = useCallback((day: number, time: Date | null) => {
+    setAttendanceData(prevData =>
+      prevData.map(data =>
+        data.day === day ? { ...data, endtime: time } : data
+      )
+    );
+  }, []);
+
+  const handleBreakTimeChange = useCallback((day: number, time: Date | null) => {
+    setAttendanceData(prevData =>
+      prevData.map(data =>
+        data.day === day ? { ...data, breaktime: time } : data
+      )
+    );
+  }, []);
+
+  const handleWorkingHoursChange = useCallback((day: number, time: Date | null) => {
+    setAttendanceData(prevData =>
+      prevData.map(data =>
+        data.day === day ? { ...data, workinghours: time } : data
+      )
+    );
+  }, []);
+
+  const handleEarlyHoursChange = useCallback((day: number, time: Date | null) => {
+    setAttendanceData(prevData =>
+      prevData.map(data =>
+        data.day === day ? { ...data, earlyhours: time } : data
+      )
+    );
+  }, []);
+
+  const handleOvertimeHoursChange = useCallback((day: number, time: Date | null) => {
+    setAttendanceData(prevData =>
+      prevData.map(data =>
+        data.day === day ? { ...data, overtimehours: time } : data
+      )
+    );
+  }, []);
+
+  const handleNightAndHolidayWorksChange = useCallback((day: number, time: Date | null) => {
+    setAttendanceData(prevData =>
+      prevData.map(data =>
+        data.day === day ? { ...data, nightandholidayworks: time } : data
+      )
+    );
+  }, []);
+
+  const handleSummaryChange = useCallback((day: number, event: SelectChangeEvent<string>) => {
+    setAttendanceData(prevData =>
+      prevData.map(data =>
+        data.day === day ? { ...data, summary: event.target.value } : data
+      )
+    );
+  }, []);
+
+  const handleMemoChange = useCallback((day: number, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setAttendanceData(prevData =>
+      prevData.map(data =>
+        data.day === day ? { ...data, memo: event.target.value } : data
+      )
+    );
+  }, []);
+
+  const calculateTotalWorkingHours = (data: AttendanceData[]): string => {
+    let totalMinutes = 0;
+
+    for (let i = 0; i < data.length; i++) {
+      const item = data[i]; // 配列の要素を代入
+
+      if (item.workinghours) { // item.workinghours が存在する場合に処理
+        const hours = item.workinghours.getHours(); // 時間を取得
+        const minutes = item.workinghours.getMinutes(); // 分を取得
+        totalMinutes += hours * 60 + minutes; // 合計分に追加
+      }
+    }
+
+    // 合計分を時間形式に変換
+    const hours = Math.floor(totalMinutes / 60);
+    const mins = totalMinutes % 60;
+
+    return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+  };
+
+  const calculateTotalEarlyHours = (data: AttendanceData[]): string => {
+    let totalMinutes = 0;
+
+    for (let i = 0; i < data.length; i++) {
+      const item = data[i]; // 配列の要素を代入
+
+      if (item.earlyhours) { // item.earlyhours が存在する場合に処理
+        const hours = item.earlyhours.getHours(); // 時間を取得
+        const minutes = item.earlyhours.getMinutes(); // 分を取得
+        totalMinutes += hours * 60 + minutes; // 合計分に追加
+      }
+    }
+
+    // 合計分を時間形式に変換
+    const hours = Math.floor(totalMinutes / 60);
+    const mins = totalMinutes % 60;
+
+    return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+  };
+
+  const calculateTotalOvertimeHours = (data: AttendanceData[]): string => {
+    let totalMinutes = 0;
+
+    for (let i = 0; i < data.length; i++) {
+      const item = data[i]; // 配列の要素を代入
+
+      if (item.overtimehours) { // item.overtimehours が存在する場合に処理
+        const hours = item.overtimehours.getHours(); // 時間を取得
+        const minutes = item.overtimehours.getMinutes(); // 分を取得
+        totalMinutes += hours * 60 + minutes; // 合計分に追加
+      }
+    }
+
+    // 合計分を時間形式に変換
+    const hours = Math.floor(totalMinutes / 60);
+    const mins = totalMinutes % 60;
+
+    return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+  };
+
+  const calculateTotalNightAndHolidayWorks = (data: AttendanceData[]): string => {
+    let totalMinutes = 0;
+
+    for (let i = 0; i < data.length; i++) {
+      const item = data[i]; // 配列の要素を代入
+
+      if (item.nightandholidayworks) { // item.nightandholidayworks が存在する場合に処理
+        const hours = item.nightandholidayworks.getHours(); // 時間を取得
+        const minutes = item.nightandholidayworks.getMinutes(); // 分を取得
+        totalMinutes += hours * 60 + minutes; // 合計分に追加
+      }
+    }
+
+    // 合計分を時間形式に変換
+    const hours = Math.floor(totalMinutes / 60);
+    const mins = totalMinutes % 60;
+
+    return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+  };
+
   return (
     <>
       <Header />
@@ -323,10 +475,56 @@ const Attendance = () => {
           </Grid>
         </Grid>
         <TableContainer>
-          <AttendanceTable
-            attendanceData={attendanceData}
-            setAttendanceData={setAttendanceData}
-          />
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ fontWeight: 'bold' }}>日</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>曜日</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>始業時間</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>終業時間</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>休憩＋中抜け</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>所定内</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>早出</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>残業</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>深夜/休出</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>摘要</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>備考</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {attendanceData.map((data) => (
+                <AttendanceRow
+                  key={data.day}
+                  data={data}
+                  handleStartTimeChange={handleStartTimeChange}
+                  handleEndTimeChange={handleEndTimeChange}
+                  handleBreakTimeChange={handleBreakTimeChange}
+                  handleWorkingHoursChange={handleWorkingHoursChange}
+                  handleEarlyHoursChange={handleEarlyHoursChange}
+                  handleOvertimeHoursChange={handleOvertimeHoursChange}
+                  handleNightAndHolidayWorksChange={handleNightAndHolidayWorksChange}
+                  handleSummaryChange={handleSummaryChange}
+                  handleMemoChange={handleMemoChange}
+                />
+              ))}
+              <TableRow>
+                <TableCell colSpan={5} sx={{ fontWeight: 'bold', textAlign: 'center', backgroundColor: '#007bff', color: 'white' }}>合計</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+                  所定内:{calculateTotalWorkingHours(attendanceData)}
+                </TableCell>
+                <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+                  早出:{calculateTotalEarlyHours(attendanceData)}
+                </TableCell>
+                <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+                  残業:{calculateTotalOvertimeHours(attendanceData)}
+                </TableCell>
+                <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+                  深夜/休出:{calculateTotalNightAndHolidayWorks(attendanceData)}
+                </TableCell>
+                <TableCell colSpan={2}></TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
         </TableContainer>
         <AttendanceDetails
           year={year as string}

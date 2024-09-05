@@ -98,10 +98,30 @@ export interface AttendanceDetailsProps {
   calculateWorkingHours: (initialTime: Initialtime) => string;
   attendanceData: AttendanceData[];
 }
-// 勤怠テーブルの型定義
-interface AttendanceTableProps {
-  attendanceData: AttendanceData[];
-  setAttendanceData: React.Dispatch<React.SetStateAction<AttendanceData[]>>;
+// 勤怠管理テーブルの行コンポーネントの型を定義
+export interface AttendanceRowProps {
+  data: {
+      day: number;
+      weekday: string;
+      starttime: Date | null;
+      endtime: Date | null;
+      breaktime: Date | null;
+      workinghours: Date | null;
+      earlyhours: Date | null;
+      overtimehours: Date | null;
+      nightandholidayworks: Date | null;
+      summary: string;
+      memo: string;
+  };
+  handleStartTimeChange: (day: number, time: Date | null) => void;
+  handleEndTimeChange: (day: number, time: Date | null) => void;
+  handleBreakTimeChange: (day: number, time: Date | null) => void;
+  handleWorkingHoursChange: (day: number, time: Date | null) => void;
+  handleEarlyHoursChange: (day: number, time: Date | null) => void;
+  handleOvertimeHoursChange: (day: number, time: Date | null) => void;
+  handleNightAndHolidayWorksChange: (day: number, time: Date | null) => void;
+  handleSummaryChange: (day: number, event: SelectChangeEvent<string>) => void;
+  handleMemoChange: (day: number, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
 
