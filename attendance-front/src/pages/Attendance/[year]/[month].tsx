@@ -34,18 +34,18 @@ const Attendance = () => {
         });
         const data = await response.json();
         console.log(data);
-  
+
         // デフォルトデータを先に設定する
         const daysInMonth = new Date(parseInt(year), parseInt(month), 0).getDate();
         const defaultData: AttendanceData[] = [];
         const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
-  
+
         // 月の日数分だけ出勤簿データを回す
         for (let day = 1; day <= daysInMonth; day++) {
           const date = new Date(parseInt(year), parseInt(month) - 1, day);
           const weekdayIndex = date.getDay(); // 日付から曜日のインデックス
           const weekday = weekdays[weekdayIndex]; // 曜日のインデックスを使って曜日を取得
-  
+
           // データを初期化
           const detileDayData: AttendanceData = {
             attendanceid: null,
@@ -61,7 +61,7 @@ const Attendance = () => {
             summary: '',
             memo: '',
           };
-  
+
           // データがある場合更新する
           const existingData = data.find((data: GetAttendanceData) => data.day === day);
           if (existingData) {
@@ -75,21 +75,21 @@ const Attendance = () => {
             detileDayData.summary = existingData.summary;
             detileDayData.memo = existingData.memo;
           }
-  
+
           defaultData.push(detileDayData);
         }
-  
+
         setAttendanceData(defaultData);
       } catch (error) {
         console.log(error);
       }
     };
-  
+
     if (year && month) {
       fetchAttendanceData(year as string, month as string);
     }
   }, [year, month]);
-  
+
 
   const handleSubmit = async () => {
     try {
@@ -291,62 +291,62 @@ const Attendance = () => {
     return date;
   };
   const calculateWorkingHours = (initialTime: Initialtime): string => {
-  if (!initialTime.selectedStartTime || !initialTime.selectedEndTime || !initialTime.selectedBreakTime) {
-    return "00:00";
-  }
+    if (!initialTime.selectedStartTime || !initialTime.selectedEndTime || !initialTime.selectedBreakTime) {
+      return "00:00";
+    }
 
-  // 開始時刻と終了時刻と休憩時間の時間と分を取得
-  const startHour = initialTime.selectedStartTime.getHours();
-  const startMinutes = initialTime.selectedStartTime.getMinutes();
-  const endHour = initialTime.selectedEndTime.getHours();
-  const endMinutes = initialTime.selectedEndTime.getMinutes();
-  const breakHour = initialTime.selectedBreakTime.getHours();
-  const breakMinutes = initialTime.selectedBreakTime.getMinutes();
+    // 開始時刻と終了時刻と休憩時間の時間と分を取得
+    const startHour = initialTime.selectedStartTime.getHours();
+    const startMinutes = initialTime.selectedStartTime.getMinutes();
+    const endHour = initialTime.selectedEndTime.getHours();
+    const endMinutes = initialTime.selectedEndTime.getMinutes();
+    const breakHour = initialTime.selectedBreakTime.getHours();
+    const breakMinutes = initialTime.selectedBreakTime.getMinutes();
 
-  // 分単位に変換
-  const startInMinutes = startHour * 60 + startMinutes;
-  const endInMinutes = endHour * 60 + endMinutes;
-  const breakInMinutes = breakHour * 60 + breakMinutes;
+    // 分単位に変換
+    const startInMinutes = startHour * 60 + startMinutes;
+    const endInMinutes = endHour * 60 + endMinutes;
+    const breakInMinutes = breakHour * 60 + breakMinutes;
 
-  // 勤務時間を計算
-  const workkingMinutes = endInMinutes - startInMinutes - breakInMinutes;
+    // 勤務時間を計算
+    const workkingMinutes = endInMinutes - startInMinutes - breakInMinutes;
 
-  // 分単位の勤務時間を時間形式の文字列に変換
-  const hours = Math.floor(workkingMinutes / 60);
-  const minutes = workkingMinutes % 60;
-  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-};
+    // 分単位の勤務時間を時間形式の文字列に変換
+    const hours = Math.floor(workkingMinutes / 60);
+    const minutes = workkingMinutes % 60;
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+  };
 
-const parseTime = (timeString: string, year: number, month: number, day: number): Date => {
-  const [hours, minutes] = timeString.split(':').map(Number);
-  const date = new Date(year, month - 1, day, hours, minutes);
+  const parseTime = (timeString: string, year: number, month: number, day: number): Date => {
+    const [hours, minutes] = timeString.split(':').map(Number);
+    const date = new Date(year, month - 1, day, hours, minutes);
 
-  return date;
-};
+    return date;
+  };
 
-const convertToPostAttendanceData = (data: AttendanceData[], year: string, month: string): PostAttendanceData[] => {
-  return data.map(dayData => ({
-    year,
-    month,
-    day: dayData.day.toString(),
-    starttime: formatTime(dayData.starttime),
-    endtime: formatTime(dayData.endtime),
-    breaktime: formatTime(dayData.breaktime),
-    workinghours: formatTime(dayData.workinghours),
-    earlyhours: formatTime(dayData.earlyhours),
-    overtimehours: formatTime(dayData.overtimehours),
-    nightandholidayworks: formatTime(dayData.nightandholidayworks),
-    summary: dayData.summary || '',
-    memo: dayData.memo || '',
-  }));
-};
+  const convertToPostAttendanceData = (data: AttendanceData[], year: string, month: string): PostAttendanceData[] => {
+    return data.map(dayData => ({
+      year,
+      month,
+      day: dayData.day.toString(),
+      starttime: formatTime(dayData.starttime),
+      endtime: formatTime(dayData.endtime),
+      breaktime: formatTime(dayData.breaktime),
+      workinghours: formatTime(dayData.workinghours),
+      earlyhours: formatTime(dayData.earlyhours),
+      overtimehours: formatTime(dayData.overtimehours),
+      nightandholidayworks: formatTime(dayData.nightandholidayworks),
+      summary: dayData.summary || '',
+      memo: dayData.memo || '',
+    }));
+  };
 
-const formatTime = (date: Date | null): string => {
-  if (!date) return "00:00";
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  return `${hours}:${minutes}`;
-};
+  const formatTime = (date: Date | null): string => {
+    if (!date) return "00:00";
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
 
 
   return (
