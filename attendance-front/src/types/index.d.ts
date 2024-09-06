@@ -122,9 +122,7 @@ export interface AttendanceRowProps {
   handleSummaryChange: (day: number, event: SelectChangeEvent<string>) => void;
   handleMemoChange: (day: number, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
-
-
-
-
-
-
+// 勤怠テーブル合計行コンポーネントに渡すプロップス
+export interface TableTotalPrpps{
+  attendanceData: AttendanceData[];
+}

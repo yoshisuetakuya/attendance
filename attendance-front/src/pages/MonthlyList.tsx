@@ -25,8 +25,6 @@ const MonthlyList = () => {
     years.push(currentYear - i);
   }
 
-
-
   const handleChange = (event: SelectChangeEvent<string>) => {
     setYear(event.target.value);
   };
