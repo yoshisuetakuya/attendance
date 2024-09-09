@@ -100,17 +100,17 @@ export interface AttendanceDetailsProps {
 // 勤怠管理テーブルの行コンポーネントの型を定義
 export interface AttendanceRowProps {
   data: {
-      day: number;
-      weekday: string;
-      starttime: Date | null;
-      endtime: Date | null;
-      breaktime: Date | null;
-      workinghours: Date | null;
-      earlyhours: Date | null;
-      overtimehours: Date | null;
-      nightandholidayworks: Date | null;
-      summary: string;
-      memo: string;
+    day: number;
+    weekday: string;
+    starttime: Date | null;
+    endtime: Date | null;
+    breaktime: Date | null;
+    workinghours: Date | null;
+    earlyhours: Date | null;
+    overtimehours: Date | null;
+    nightandholidayworks: Date | null;
+    summary: string;
+    memo: string;
   };
   handleStartTimeChange: (day: number, time: Date | null) => void;
   handleEndTimeChange: (day: number, time: Date | null) => void;
@@ -123,6 +123,6 @@ export interface AttendanceRowProps {
   handleMemoChange: (day: number, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 // 勤怠テーブル合計行コンポーネントに渡すプロップス
-export interface TableTotalPrpps{
+export interface TableTotalPrpps {
   attendanceData: AttendanceData[];
 }
