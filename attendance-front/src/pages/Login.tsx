@@ -34,12 +34,20 @@ const Login = () => {
   };
 
   // 新規登録ダイアログの開閉の処理
-  const handleOpenEmployeeRegister = () => setOpenEmployeeRegister(true);
-  const handleCloseEmployeeRegister = () => setOpenEmployeeRegister(false);
+  const handleOpenEmployeeRegister = () => {
+    setOpenEmployeeRegister(true);
+  };
+  const handleCloseEmployeeRegister = () => {
+    setOpenEmployeeRegister(false);
+  };
 
   // パスワード再発行ダイアログの開閉処理
-  const handleOpenResetPassword = () => setOpenResetPassword(true);
-  const handleCloseResetPassword = () => setOpenResetPassword(false);
+  const handleOpenResetPassword = () => {
+    setOpenResetPassword(true);
+  };
+  const handleCloseResetPassword = () => {
+    setOpenResetPassword(false);
+  };
 
   // フォーム送信処理
   const onSubmit = async (data: FormValues) => {
@@ -49,7 +57,7 @@ const Login = () => {
     const formData = new URLSearchParams();
     formData.append('email', email);
     formData.append('password', password);
-    
+
     try {
       const response = await fetch('http://localhost:8080/login', {
         method: 'POST',
@@ -173,7 +181,7 @@ const Login = () => {
         </Box>
       </Container>
 
-      {/* 新規登録ダイアログコンポーネント */}
+      {/* 新規登録ダイアログ*/}
       <CreateNewUser
         open={openRegister}
         onClose={handleCloseEmployeeRegister}
@@ -181,7 +189,7 @@ const Login = () => {
         handleClickShowPassword={handleClickShowPassword}
       />
 
-      {/* パスワード再発行ダイアログ */}
+      {/* パスワード再発行ダイアログ*/}
       <PasswordReissue
         open={openResetPassword}
         onClose={handleCloseResetPassword}
