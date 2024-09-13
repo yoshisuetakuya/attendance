@@ -103,7 +103,7 @@ const Attendance = () => {
         credentials: 'include',
       });
       if (response.status === 200) {
-        alert("登録成功が成功しました");
+        alert("登録が成功しました");
         router.push('/MonthlyList');
       } else {
         alert("登録処理に失敗しました");
@@ -208,6 +208,12 @@ const Attendance = () => {
 
   // 自動入力ボタン
   const handleInput = () => {
+    // const confirm = window.confirm('自動入力を行いますか');
+
+    // if (!confirm) {
+    //   return;
+    // }
+
     const holidaysInMonth = getHolidaysInMonth(year as string, month as string);
     setAttendanceData(attendanceData.map(item => {
       const weekday = new Date(parseInt(year as string), parseInt(month as string) - 1, item.day);
@@ -348,7 +354,6 @@ const Attendance = () => {
     return `${hours}:${minutes}`;
   };
 
-
   return (
     <>
       <Header />
@@ -432,8 +437,6 @@ const Attendance = () => {
         <AttendanceDetails
           year={year as string}
           month={month as string}
-          initialTime={initialTime}
-          calculateWorkingHours={calculateWorkingHours}
           attendanceData={attendanceData}
         />
         <Grid container justifyContent="center" style={{ marginTop: '30px' }} alignItems="center">

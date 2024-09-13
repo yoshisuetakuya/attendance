@@ -118,8 +118,6 @@ const MonthlyList = () => {
       <PasswordUpdate
         open={openPasswordDialog}
         onClose={handleClosePasswordDialog}
-        showPassword={showPassword}
-        handleClickShowPassword={handleClickShowPassword}
       />
     </>
   );

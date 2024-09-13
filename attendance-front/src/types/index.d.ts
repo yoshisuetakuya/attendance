@@ -29,8 +29,6 @@ export interface ReissueFormValues {
 export interface PasswordUpdateProps {
   open: boolean;
   onClose: () => void;
-  showPassword: boolean;
-  handleClickShowPassword: () => void;
 }
 //　パスワード更新画面の型定義
 export interface UpdateFormValues {
@@ -93,8 +91,6 @@ export interface Initialtime {
 export interface AttendanceDetailsProps {
   year: string;
   month: string;
-  initialTime: Initialtime;
-  calculateWorkingHours: (initialTime: Initialtime) => string;
   attendanceData: AttendanceData[];
 }
 // 勤怠管理テーブルの行コンポーネントの型を定義

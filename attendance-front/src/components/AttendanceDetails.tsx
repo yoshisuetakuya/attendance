@@ -6,8 +6,6 @@ import Holidays from 'date-holidays';
 const AttendanceDetails = ({
     year,
     month,
-    initialTime,
-    calculateWorkingHours,
     attendanceData,
 }: AttendanceDetailsProps) => {
     const [paidLeaveCount, setPaidLeaveCount] = useState(0);
@@ -88,12 +86,12 @@ const AttendanceDetails = ({
                         所定勤務日数: {calculateScheduledWorkDays(year, month)}日
                     </TableCell>
                     <TableCell sx={{ fontWeight: 'bold' }}>
-                        所定勤務時間: {calculateWorkingHours(initialTime)}
+                        所定勤務時間: {"7:30"}
                     </TableCell>
                 </TableRow>
                 <TableRow>
                     <TableCell sx={{ fontWeight: 'bold' }}>
-                        当月勤務日数: {calculateWorkDays(year, month, absentCount, paidLeaveCount, specialLeaveCount)}日
+                        当月出勤日数: {calculateWorkDays(year, month, absentCount, paidLeaveCount, specialLeaveCount)}日
                     </TableCell>
                     <TableCell sx={{ fontWeight: 'bold' }}>
                         有給取得日数: {paidLeaveCount}日

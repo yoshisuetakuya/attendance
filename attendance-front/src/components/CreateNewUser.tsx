@@ -60,7 +60,8 @@ const CreateNewUser = ({
       <DialogTitle>新規登録</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          名前、メールアドレス、パスワードを入力してください。
+          名前、メールアドレス、パスワードを入力してください。<br />
+          パスワードは、8文字以上で、英数字と _(アンダーバー)、-(ハイフン) を使用できます。
         </DialogContentText>
 
         <Controller

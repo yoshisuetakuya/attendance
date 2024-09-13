@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
@@ -19,8 +19,6 @@ import { PasswordUpdateProps, UpdateFormValues } from "@/types";
 const PasswordUpdate = ({
   open,
   onClose,
-  showPassword,
-  handleClickShowPassword,
 }: PasswordUpdateProps) => {
   const { control, handleSubmit, formState: { errors } } = useForm<UpdateFormValues>({
     defaultValues: {
@@ -28,6 +26,17 @@ const PasswordUpdate = ({
       newPassword: "",
     }
   });
+
+  const [newShowPassword, setNewShowPassword] = useState(false);
+  const [currentShowPassword, setCurrentShowPassword] = useState(false);
+  
+  const handleClickNewShowPassword = () => {
+    setNewShowPassword(!newShowPassword);
+  };
+
+  const handleClickCurrentShowPassword = () => {
+    setCurrentShowPassword(!currentShowPassword);
+  };
 
   const onSubmit = async (data: UpdateFormValues) => {
     try {
@@ -48,7 +57,7 @@ const PasswordUpdate = ({
         onClose();
         router.push('/Login')
       } else if (response.status === 404) {
-        alert("現在のパスワードが見つかりませんでした");
+        alert("現在のパスワードが違います");
 
       } else {
         alert("パスワードの変更に失敗しました");
@@ -63,7 +72,8 @@ const PasswordUpdate = ({
       <DialogTitle>パスワードの変更</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          現在のパスワードと新しいパスワードを入力してください
+          現在のパスワードと新しいパスワードを入力してください。<br />
+          新しいパスワードは、8文字以上で、英数字と _(アンダーバー)、-(ハイフン) を使って作成ください。
         </DialogContentText>
 
         <Controller
@@ -84,14 +94,14 @@ const PasswordUpdate = ({
               variant="outlined"
               margin="normal"
               fullWidth
-              type={showPassword ? 'text' : 'password'}
+              type={currentShowPassword ? 'text' : 'password'}
               error={!!errors.currentPassword}
               helperText={errors.currentPassword?.message}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={handleClickShowPassword} edge="end">
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    <IconButton onClick={handleClickCurrentShowPassword} edge="end">
+                      {currentShowPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -117,14 +127,14 @@ const PasswordUpdate = ({
               variant="outlined"
               margin="normal"
               fullWidth
-              type={showPassword ? 'text' : 'password'}
+              type={newShowPassword ? 'text' : 'password'}
               error={!!errors.newPassword}
               helperText={errors.newPassword?.message}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={handleClickShowPassword} edge="end">
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    <IconButton onClick={handleClickNewShowPassword} edge="end">
+                      {newShowPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
                 ),
