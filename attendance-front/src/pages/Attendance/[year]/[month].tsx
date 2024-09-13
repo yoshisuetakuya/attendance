@@ -208,11 +208,11 @@ const Attendance = () => {
 
   // 自動入力ボタン
   const handleInput = () => {
-    // const confirm = window.confirm('自動入力を行いますか');
+    const confirm = window.confirm('自動入力を行いますか');
 
-    // if (!confirm) {
-    //   return;
-    // }
+    if (!confirm) {
+      return;
+    }
 
     const holidaysInMonth = getHolidaysInMonth(year as string, month as string);
     setAttendanceData(attendanceData.map(item => {
