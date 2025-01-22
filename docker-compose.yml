@@ -1,0 +1,39 @@
+version: '3'
+services:
+  frontend:
+    build: ./attendance-front  # Next.jsのDockerfileがあるディレクトリを指定
+    ports:
+      - "3000:3000"  # ローカルホストのポート3000でフロントエンドを公開
+    volumes:
+      - ./attendance-front:/app  # 開発中の変更を即反映できるよう
+    environment:
+      - NODE_ENV=production  # 環境設定
+    depends_on:
+      - backend  # バックエンドが起動している必要がある
+      - db  # データベースが起動している必要がある
+
+  backend:
+    build: ./attendance-back  # Spring BootのDockerfileがあるディレクトリを指定
+    ports:
+      - "8080:8080"  # ローカルホストのポート8080でバックエンドを公開
+    environment:
+      SPRING_PROFILES_ACTIVE: prod  # 必要に応じて変更
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres  # データベース接続情報
+      SPRING_DATASOURCE_USERNAME: postgres  # PostgreSQLのユーザー名
+      SPRING_DATASOURCE_PASSWORD: postgres  # PostgreSQLのパスワード
+    depends_on:
+      - db  # データベースが起動している必要がある
+
+  db:
+    image: postgres:15  # PostgreSQLのDockerイメージ
+    environment:
+      POSTGRES_DB: postgres  # データベース名
+      POSTGRES_USER: postgres  # PostgreSQLのユーザー名
+      POSTGRES_PASSWORD: postgres  # PostgreSQLのパスワード
+    ports:
+      - "5432:5432"  # ホストの5432番ポートをコンテナの5432番ポートにマッピング
+    volumes:
+      - db_data:/var/lib/postgresql/data  # データベースデータを永続化
+
+volumes:
+  db_data:  # PostgreSQLデータを保存するボリューム
