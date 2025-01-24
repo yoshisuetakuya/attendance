@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableRow } from '@mui/material';
+import { Grid, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material';
 import { AttendanceDetailsProps } from '@/types';
 import Holidays from 'date-holidays';
 
@@ -79,34 +79,40 @@ const AttendanceDetails = ({
     };
 
     return (
-        <Table sx={{ width: '800px', marginTop: '20px', marginLeft: '20px' }}>
-            <TableBody>
-                <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>
-                        所定勤務日数: {calculateScheduledWorkDays(year, month)}日
-                    </TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>
-                        所定勤務時間: {"7:30"}
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>
-                        当月出勤日数: {calculateWorkDays(year, month, absentCount, paidLeaveCount, specialLeaveCount)}日
-                    </TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>
-                        有給取得日数: {paidLeaveCount}日
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>
-                        当月欠勤日数: {absentCount}日
-                    </TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>
-                        特別休暇日数: {specialLeaveCount}日
-                    </TableCell>
-                </TableRow>
-            </TableBody>
-        </Table>
+        <Grid container spacing={1} sx={{ marginTop: '3px' }}>
+            <Grid item xs={1} sx={{ borderRight: '1px solid #ccc' }}>
+                <Typography sx={{ fontWeight: 'bold', fontSize: '15px', textAlign: 'left' }}>
+                    所定勤務日数: {calculateScheduledWorkDays(year, month)}日
+                </Typography>
+            </Grid>
+            <Grid item xs={1.1} sx={{ borderRight: '1px solid #ccc', paddingRight: '8px' }}>
+                <Typography sx={{ fontWeight: 'bold', fontSize: '15px', textAlign: 'left' }}>
+                    所定勤務時間: {"7:30"}
+                </Typography>
+            </Grid>
+            <Grid item xs={1} sx={{ borderRight: '1px solid #ccc', paddingRight: '8px' }}>
+                <Typography sx={{ fontWeight: 'bold', fontSize: '15px', textAlign: 'left' }}>
+                    当月出勤日数: {calculateWorkDays(year, month, absentCount, paidLeaveCount, specialLeaveCount)}日
+                </Typography>
+            </Grid>
+            <Grid item xs={1} sx={{ borderRight: '1px solid #ccc', paddingRight: '8px' }}>
+                <Typography sx={{ fontWeight: 'bold', fontSize: '15px', textAlign: 'left' }}>
+                    有給取得日数: {paidLeaveCount}日
+                </Typography>
+            </Grid>
+            <Grid item xs={1} sx={{ borderRight: '1px solid #ccc', paddingRight: '8px' }}>
+                <Typography sx={{ fontWeight: 'bold', fontSize: '15px', textAlign: 'left' }}>
+                    当月欠勤日数: {absentCount}日
+                </Typography>
+            </Grid>
+            <Grid item xs={1} sx={{ textAlign: 'left' }}>
+                <Typography sx={{ fontWeight: 'bold', fontSize: '15px' }}>
+                    特別休暇日数: {specialLeaveCount}日
+                </Typography>
+            </Grid>
+        </Grid>
+
+
     );
 };
 

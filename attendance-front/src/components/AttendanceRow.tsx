@@ -17,76 +17,142 @@ const AttendanceRow = memo(function AttendanceRow({
 }: AttendanceRowProps) {
     return (
         <TableRow key={data.day}>
-            <TableCell>{data.day}</TableCell>
-            <TableCell>{data.weekday}</TableCell>
-            <TableCell>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>{data.day}</TableCell>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>{data.weekday}</TableCell>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '4px' }}>
                 <Box sx={{ width: '120px' }}>
                     <TimePicker
-                        label="始業時間"
                         value={data.starttime}
                         onChange={(time) => handleStartTimeChange(data.day, time)}
+                        sx={{
+                            '& .MuiInputBase-root': {
+                                border: 'none',
+                            },
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                border: 'none',
+                            },
+                            height: '50px',
+                        }}
                     />
                 </Box>
             </TableCell>
-            <TableCell>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
                     <TimePicker
-                        label="終業時間"
                         value={data.endtime}
                         onChange={(time) => handleEndTimeChange(data.day, time)}
+                        sx={{
+                            '& .MuiInputBase-root': {
+                                border: 'none',
+                            },
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                border: 'none',
+                            },
+                            height: '50px',
+                        }}
                     />
                 </Box>
             </TableCell>
-            <TableCell>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
                     <TimePicker
-                        label="休憩＋中抜け"
                         value={data.breaktime}
                         onChange={(time) => handleBreakTimeChange(data.day, time)}
+                        sx={{
+                            '& .MuiInputBase-root': {
+                                border: 'none',
+                            },
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                border: 'none',
+                            },
+                            height: '50px',
+                        }}
                     />
                 </Box>
             </TableCell>
-            <TableCell>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
                     <TimePicker
-                        label="所定内"
                         value={data.workinghours}
                         onChange={(time) => handleWorkingHoursChange(data.day, time)}
+                        sx={{
+                            '& .MuiInputBase-root': {
+                                border: 'none',
+                            },
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                border: 'none',
+                            },
+                            height: '50px',
+                        }}
                     />
                 </Box>
             </TableCell>
-            <TableCell>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
                     <TimePicker
-                        label="早出"
                         value={data.earlyhours}
                         onChange={(time) => handleEarlyHoursChange(data.day, time)}
+                        sx={{
+                            '& .MuiInputBase-root': {
+                                border: 'none',
+                            },
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                border: 'none',
+                            },
+                            height: '50px',
+                        }}
                     />
                 </Box>
             </TableCell>
-            <TableCell>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
                     <TimePicker
-                        label="残業"
                         value={data.overtimehours}
                         onChange={(time) => handleOvertimeHoursChange(data.day, time)}
+                        sx={{
+                            '& .MuiInputBase-root': {
+                                border: 'none',
+                            },
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                border: 'none',
+                            },
+                            height: '50px',
+                        }}
                     />
                 </Box>
             </TableCell>
-            <TableCell>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
                     <TimePicker
-                        label="深夜/休出"
                         value={data.nightandholidayworks}
                         onChange={(time) => handleNightAndHolidayWorksChange(data.day, time)}
+                        sx={{
+                            '& .MuiInputBase-root': {
+                                border: 'none',
+                            },
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                border: 'none',
+                            },
+                            height: '50px',
+                        }}
                     />
                 </Box>
             </TableCell>
-            <TableCell>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>
                 <FormControl fullWidth>
                     <Select
                         value={data.summary}
                         onChange={(event) => handleSummaryChange(data.day, event)}
+                        sx={{
+                            border: 'none',
+                            '& .MuiSelect-select': {
+                                border: 'none',
+                            },
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                border: 'none',
+                            },
+                            height: '30px', // 高さを設定
+                        }}
                     >
                         <MenuItem value="">選択なし</MenuItem>
                         <MenuItem value="有給">有給</MenuItem>
@@ -97,15 +163,26 @@ const AttendanceRow = memo(function AttendanceRow({
                     </Select>
                 </FormControl>
             </TableCell>
-            <TableCell>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>
                 <TextField
                     value={data.memo}
                     sx={{ width: '300px' }}
                     multiline
                     onChange={(event) => handleMemoChange(data.day, event)}
+                    InputProps={{
+                        sx: {
+                            border: 'none',
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                border: 'none',
+                            },
+                            height: '30px', // 高さを設定
+                        },
+                    }}
                 />
             </TableCell>
         </TableRow>
+
+
     );
 });
 

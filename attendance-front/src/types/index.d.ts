@@ -121,4 +121,5 @@ export interface AttendanceRowProps {
 // 勤怠テーブル合計行コンポーネントに渡すプロップス
 export interface TableTotalPrpps {
   attendanceData: AttendanceData[];
+  style?: React.CSSProperties;
 }

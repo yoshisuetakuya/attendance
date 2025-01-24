@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button, Grid, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
@@ -354,6 +354,23 @@ const Attendance = () => {
     return `${hours}:${minutes}`;
   };
 
+  const [isSticky, setIsSticky] = useState(false);
+  const tableHeadRef = useRef<HTMLTableSectionElement | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (tableHeadRef.current) {
+        const tableRect = tableHeadRef.current.getBoundingClientRect();
+        setIsSticky(tableRect.top <= 0);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <>
       <Header />
@@ -395,9 +412,21 @@ const Attendance = () => {
             <Button variant="contained" onClick={handleInput}>自動入力</Button>
           </Grid>
         </Grid>
-        <TableContainer>
+        <TableContainer style={{
+          overflow: 'visible',
+        }}>
           <Table>
-            <TableHead>
+            <TableHead
+              ref={tableHeadRef}
+              style={{
+                position: isSticky ? 'sticky' : 'relative',
+                top: isSticky ? 0 : 'auto',
+                backgroundColor: 'white',
+                zIndex: 1,
+                width: '100%',
+                boxShadow: isSticky ? '0px 2px 0px 0px #333' : 'none',
+              }}
+            >
               <TableRow>
                 <TableCell sx={{ fontWeight: 'bold' }}>日</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }}>曜日</TableCell>
@@ -428,24 +457,35 @@ const Attendance = () => {
                   handleMemoChange={handleMemoChange}
                 />
               ))}
-              <TableTotal
-                attendanceData={attendanceData}
-              />
             </TableBody>
           </Table>
         </TableContainer>
-        <AttendanceDetails
-          year={year as string}
-          month={month as string}
-          attendanceData={attendanceData}
-        />
-        <Grid container justifyContent="center" style={{ marginTop: '30px' }} alignItems="center">
-          <Grid item>
-            <Button variant="contained" onClick={handleSubmit}>
-              登録
-            </Button>
+        {/* フッター部分を固定 */}
+        <div
+          style={{
+            position: 'sticky',
+            bottom: 0,
+            backgroundColor: '#fff',
+            // zIndex: 1000,
+            // borderTop: '2px solid #333', // 黒い横線
+          }}
+        >
+          <TableTotal
+            attendanceData={attendanceData}
+          />
+          <AttendanceDetails
+            year={year as string}
+            month={month as string}
+            attendanceData={attendanceData}
+          />
+          <Grid container justifyContent="center" style={{ marginTop: '30px' }} alignItems="center">
+            <Grid item>
+              <Button variant="contained" onClick={handleSubmit}>
+                登録
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
+        </div>
       </LocalizationProvider>
     </>
   );

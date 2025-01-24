@@ -22,8 +22,8 @@ public class PasswordResetService {
 	private EmployeeRepository employeeRepository;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-//	@Autowired
-//	private EmailService emailService;
+	@Autowired
+	private EmailService emailService;
 
 	/**
 	 * 指定されたメールアドレスのユーザーのパスワードをリセットするメソッド
@@ -45,7 +45,7 @@ public class PasswordResetService {
 
 			// 新しいパスワードをメールで送信
 			// 実際にメールを送る機能を使う際にここのコメントアウトを外す
-//			emailService.sendPasswordResetEmail(email, newPassword);
+			emailService.sendPasswordResetEmail(email, newPassword);
 
 			return true;
 
