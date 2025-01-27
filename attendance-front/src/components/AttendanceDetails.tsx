@@ -80,39 +80,37 @@ const AttendanceDetails = ({
 
     return (
         <Grid container spacing={1} sx={{ marginTop: '3px' }}>
-            <Grid item xs={1} sx={{ borderRight: '1px solid #ccc' }}>
+            <Grid item xs={1.3} sx={{ borderRight: '1px solid #ccc' }}>
                 <Typography sx={{ fontWeight: 'bold', fontSize: '15px', textAlign: 'left' }}>
                     所定勤務日数: {calculateScheduledWorkDays(year, month)}日
                 </Typography>
             </Grid>
-            <Grid item xs={1.1} sx={{ borderRight: '1px solid #ccc', paddingRight: '8px' }}>
+            <Grid item xs={1.3} sx={{ borderRight: '1px solid #ccc', paddingRight: '8px' }}>
                 <Typography sx={{ fontWeight: 'bold', fontSize: '15px', textAlign: 'left' }}>
                     所定勤務時間: {"7:30"}
                 </Typography>
             </Grid>
-            <Grid item xs={1} sx={{ borderRight: '1px solid #ccc', paddingRight: '8px' }}>
+            <Grid item xs={1.3} sx={{ borderRight: '1px solid #ccc', paddingRight: '8px' }}>
                 <Typography sx={{ fontWeight: 'bold', fontSize: '15px', textAlign: 'left' }}>
                     当月出勤日数: {calculateWorkDays(year, month, absentCount, paidLeaveCount, specialLeaveCount)}日
                 </Typography>
             </Grid>
-            <Grid item xs={1} sx={{ borderRight: '1px solid #ccc', paddingRight: '8px' }}>
+            <Grid item xs={1.3} sx={{ borderRight: '1px solid #ccc', paddingRight: '8px' }}>
                 <Typography sx={{ fontWeight: 'bold', fontSize: '15px', textAlign: 'left' }}>
                     有給取得日数: {paidLeaveCount}日
                 </Typography>
             </Grid>
-            <Grid item xs={1} sx={{ borderRight: '1px solid #ccc', paddingRight: '8px' }}>
+            <Grid item xs={1.3} sx={{ borderRight: '1px solid #ccc', paddingRight: '8px' }}>
                 <Typography sx={{ fontWeight: 'bold', fontSize: '15px', textAlign: 'left' }}>
                     当月欠勤日数: {absentCount}日
                 </Typography>
             </Grid>
-            <Grid item xs={1} sx={{ textAlign: 'left' }}>
+            <Grid item xs={1.3} sx={{ textAlign: 'left' }}>
                 <Typography sx={{ fontWeight: 'bold', fontSize: '15px' }}>
                     特別休暇日数: {specialLeaveCount}日
                 </Typography>
             </Grid>
         </Grid>
-
-
     );
 };
 

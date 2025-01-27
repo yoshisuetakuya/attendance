@@ -86,20 +86,19 @@ const TableTotal = ({
 
     return (
         <TableRow>
-            <TableCell colSpan={5} sx={{ fontWeight: 'bold', textAlign: 'center', backgroundColor: '#007bff', color: 'white' }}>合計</TableCell>
-            <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-                所定内:{calculateTotalWorkingHours(attendanceData)}
+            <TableCell colSpan={5} sx={{ fontWeight: 'bold', textAlign: 'center', backgroundColor: '#007bff', color: 'white', width: 70 }}>合 計</TableCell>
+            <TableCell sx={{ fontWeight: 'bold', textAlign: 'center', width: 150, border: '1px solid #ccc'}}>
+                所定内: {calculateTotalWorkingHours(attendanceData)}
             </TableCell>
-            <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-                早出:{calculateTotalEarlyHours(attendanceData)}
+            <TableCell sx={{ fontWeight: 'bold', textAlign: 'center', width: 150, border: '1px solid #ccc'}}>
+                早出: {calculateTotalEarlyHours(attendanceData)}
             </TableCell>
-            <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-                残業:{calculateTotalOvertimeHours(attendanceData)}
+            <TableCell sx={{ fontWeight: 'bold', textAlign: 'center', width: 150, border: '1px solid #ccc'}}>
+                残業: {calculateTotalOvertimeHours(attendanceData)}
             </TableCell>
-            <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-                深夜/休出:{calculateTotalNightAndHolidayWorks(attendanceData)}
+            <TableCell sx={{ fontWeight: 'bold', textAlign: 'center', width: 150, border: '1px solid #ccc'}}>
+                深夜/休出: {calculateTotalNightAndHolidayWorks(attendanceData)}
             </TableCell>
-            <TableCell colSpan={2}></TableCell>
         </TableRow>
     )
 };

@@ -17,9 +17,9 @@ const AttendanceRow = memo(function AttendanceRow({
 }: AttendanceRowProps) {
     return (
         <TableRow key={data.day}>
-            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>{data.day}</TableCell>
-            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>{data.weekday}</TableCell>
-            <TableCell sx={{ border: '1px solid #ccc', padding: '4px' }}>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '1px 4px', height: '30px', width: '3' }}>{data.day}</TableCell>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '1px 4px', height: '30px' }}>{data.weekday}</TableCell>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px'}}>
                 <Box sx={{ width: '120px' }}>
                     <TimePicker
                         value={data.starttime}
@@ -36,7 +36,7 @@ const AttendanceRow = memo(function AttendanceRow({
                     />
                 </Box>
             </TableCell>
-            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
                     <TimePicker
                         value={data.endtime}
@@ -53,7 +53,7 @@ const AttendanceRow = memo(function AttendanceRow({
                     />
                 </Box>
             </TableCell>
-            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
                     <TimePicker
                         value={data.breaktime}
@@ -70,7 +70,7 @@ const AttendanceRow = memo(function AttendanceRow({
                     />
                 </Box>
             </TableCell>
-            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
                     <TimePicker
                         value={data.workinghours}
@@ -87,7 +87,7 @@ const AttendanceRow = memo(function AttendanceRow({
                     />
                 </Box>
             </TableCell>
-            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
                     <TimePicker
                         value={data.earlyhours}
@@ -104,7 +104,7 @@ const AttendanceRow = memo(function AttendanceRow({
                     />
                 </Box>
             </TableCell>
-            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
                     <TimePicker
                         value={data.overtimehours}
@@ -121,7 +121,7 @@ const AttendanceRow = memo(function AttendanceRow({
                     />
                 </Box>
             </TableCell>
-            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
                     <TimePicker
                         value={data.nightandholidayworks}
@@ -138,7 +138,7 @@ const AttendanceRow = memo(function AttendanceRow({
                     />
                 </Box>
             </TableCell>
-            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <FormControl fullWidth>
                     <Select
                         value={data.summary}
@@ -151,7 +151,7 @@ const AttendanceRow = memo(function AttendanceRow({
                             '& .MuiOutlinedInput-notchedOutline': {
                                 border: 'none',
                             },
-                            height: '30px', // 高さを設定
+                            height: '30px',
                         }}
                     >
                         <MenuItem value="">選択なし</MenuItem>
@@ -163,7 +163,7 @@ const AttendanceRow = memo(function AttendanceRow({
                     </Select>
                 </FormControl>
             </TableCell>
-            <TableCell sx={{ border: '1px solid #ccc', padding: '2px 4px', height: '30px' }}>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <TextField
                     value={data.memo}
                     sx={{ width: '300px' }}
@@ -175,14 +175,12 @@ const AttendanceRow = memo(function AttendanceRow({
                             '& .MuiOutlinedInput-notchedOutline': {
                                 border: 'none',
                             },
-                            height: '30px', // 高さを設定
+                            height: '30px',
                         },
                     }}
                 />
             </TableCell>
         </TableRow>
-
-
     );
 });
 

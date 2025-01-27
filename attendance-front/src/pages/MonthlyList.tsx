@@ -83,14 +83,14 @@ const MonthlyList = () => {
   return (
     <>
       <Header />
-      <Grid container justifyContent="center">
-        <Grid item>
-          <Typography component="h1" variant="h4" sx={{ marginTop: 4 }} gutterBottom>
+      <Grid container justifyContent="center" alignItems="center" direction="column" >
+        <Grid item xs={12} sx={{ textAlign: "center" }}>
+          <Typography component="h1" variant="h4" sx={{ marginTop: 4, marginBottom: 3 }} gutterBottom>
             月別表示画面
           </Typography>
-          <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+          <FormControl variant="outlined" sx={{ minWidth: 100, marginBottom: 6 }}>
             <InputLabel>対象年</InputLabel>
-            <Select value={year} onChange={handleChange} label="対象年">
+            <Select value={year} onChange={handleChange} label="対象年" >
               <MenuItem value="" disabled>年を選択</MenuItem>
               {years.map((year) => (
                 <MenuItem key={year} value={year}>
@@ -99,19 +99,19 @@ const MonthlyList = () => {
               ))}
             </Select>
           </FormControl>
-          <List>
+          <Grid container spacing={2} justifyContent="center">
             {months.map((month) => (
-              <ListItem key={month}>
+              <Grid item xs={4} key={month} sx={{ textAlign: 'center', marginTop: 1, fontWeight: 'bold' }}>
                 <Link href={`/Attendance/${year}/${month}`} underline="hover">
                   {month}月勤怠表
                 </Link>
-              </ListItem>
+              </Grid>
             ))}
-          </List>
+          </Grid>
         </Grid>
-        <Grid item container spacing={2} justifyContent="center" sx={{ marginTop: 12 }}>
-          <Button variant="contained" sx={{ margin: 1 }} onClick={handleOpenPasswordDialog}>パスワードの変更</Button>
-          <Button variant="contained" sx={{ margin: 1 }} onClick={handleLogout}>ログアウト</Button>
+        <Grid item container spacing={2} justifyContent="center" sx={{ marginTop: 15 }}>
+          <Button variant="contained" sx={{ margin: '0 32px' }} onClick={handleOpenPasswordDialog}>パスワードの変更</Button>
+          <Button variant="contained" sx={{ margin: '0 32px' }} onClick={handleLogout}>ログアウト</Button>
         </Grid>
       </Grid>
 

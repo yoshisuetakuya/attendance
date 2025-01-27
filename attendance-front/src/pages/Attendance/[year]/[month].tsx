@@ -371,18 +371,23 @@ const Attendance = () => {
     };
   }, []);
 
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null; // 初期状態では何も表示しない
+  }
+
   return (
     <>
       <Header />
       <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
         <Grid container justifyContent="center">
-          <Typography variant="h4" component="h1" style={{ marginTop: '30px' }} gutterBottom>
-            出勤簿
-          </Typography>
-        </Grid>
-        <Grid container justifyContent="flex-end">
-          <Typography variant="h6" component="h1" gutterBottom>
-            {year}年{month}月
+          <Typography variant="h4" component="h1" style={{ marginTop: '30px', marginBottom: '30px' }} gutterBottom>
+            {year}年{month}月 勤怠表
           </Typography>
         </Grid>
         <Grid container alignItems="center">
@@ -392,12 +397,14 @@ const Attendance = () => {
                 label="始業時間"
                 value={initialTime.selectedStartTime}
                 onChange={handleSelectedStartTime}
+                sx={{ width: '150px' }}
               />
               <Typography style={{ margin: '10px' }}>〜</Typography>
               <TimePicker
                 label="終業時間"
                 value={initialTime.selectedEndTime}
                 onChange={handleSelectedEndTime}
+                sx={{ width: '150px' }}
               />
             </Grid>
           </Grid>
@@ -406,6 +413,7 @@ const Attendance = () => {
               label="休憩時間"
               value={initialTime.selectedBreakTime}
               onChange={handleSelectedBreakTime}
+              sx={{ width: '150px' }}
             />
           </Grid>
           <Grid item xs={4} container justifyContent="flex-end">
@@ -478,7 +486,7 @@ const Attendance = () => {
             month={month as string}
             attendanceData={attendanceData}
           />
-          <Grid container justifyContent="center" style={{ marginTop: '30px' }} alignItems="center">
+          <Grid container justifyContent="center" style={{ marginTop: '15px' }} alignItems="center">
             <Grid item>
               <Button variant="contained" onClick={handleSubmit}>
                 登録
