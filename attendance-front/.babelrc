@@ -1,0 +1,15 @@
+{
+    "presets": [
+      ["@babel/preset-react", { "runtime": "automatic" }],  // React 17以降の自動インポート設定
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"  // 現在のNode.jsのバージョンに合わせてトランスパイル
+          }
+        }
+      ],
+      "@babel/preset-typescript"  // TypeScriptを処理するための設定
+    ]
+  }
+  

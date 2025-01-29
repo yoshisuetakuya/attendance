@@ -378,7 +378,7 @@ const Attendance = () => {
   }, []);
 
   if (!mounted) {
-    return null; // 初期状態では何も表示しない
+    return null;
   }
 
   return (
@@ -474,8 +474,6 @@ const Attendance = () => {
             position: 'sticky',
             bottom: 0,
             backgroundColor: '#fff',
-            // zIndex: 1000,
-            // borderTop: '2px solid #333', // 黒い横線
           }}
         >
           <TableTotal
