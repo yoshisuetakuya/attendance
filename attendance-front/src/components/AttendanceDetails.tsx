@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material';
+import  Grid  from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import { AttendanceDetailsProps } from '@/types';
 import Holidays from 'date-holidays';
 

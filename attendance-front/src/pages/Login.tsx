@@ -12,7 +12,7 @@ import {
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
-import router from "next/router";
+import { useRouter } from "next/router";
 import Header from "@/components/Header";
 import { Controller, useForm } from "react-hook-form";
 import CreateNewUser from "@/components/CreateNewUser";
@@ -24,6 +24,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [openRegister, setOpenEmployeeRegister] = useState(false);
   const [openResetPassword, setOpenResetPassword] = useState(false);
+  const router = useRouter();
 
   // useFormフックを使ってフォームの管理とバリデーションを設定
   const { control, handleSubmit, formState: { errors }, setError } = useForm<FormValues>();

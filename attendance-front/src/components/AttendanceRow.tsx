@@ -1,5 +1,11 @@
 import React, { memo } from 'react';
-import { TableRow, TableCell, Box, TextField, FormControl, Select, MenuItem } from '@mui/material';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { AttendanceRowProps } from '@/types'
 
