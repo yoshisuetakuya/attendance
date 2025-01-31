@@ -3,7 +3,7 @@ import { Button, FormControl, Grid, InputLabel, Link, List, ListItem, MenuItem, 
 import Header from "@/components/Header";
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useEffect, useState } from 'react';
-import router from 'next/router';
+import { useRouter } from "next/router";
 import PasswordUpdate from '@/components//PasswordUpdate';
 import { SystemData } from '@/types';
 
@@ -20,6 +20,7 @@ const MonthlyList = () => {
   // デフォルト値で現在の年を設定
   const [year, setYear] = useState<string>(currentYear.toString());
   const years = [];
+  const router = useRouter();
   // 過去３年分の年を生成する
   for (let i = pastYears; i >= 0; i--) {
     years.push(currentYear - i);

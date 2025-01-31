@@ -56,6 +56,7 @@
     },
     "transformIgnorePatterns": [
       "node_modules/(?!@mui/material|@mui/icons-material|react-router-dom)"
-    ]
+    ],
+    "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"]
   }
 }

@@ -30,6 +30,7 @@ const AttendanceRow = memo(function AttendanceRow({
                     <TimePicker
                         value={data.starttime}
                         onChange={(time) => handleStartTimeChange(data.day, time)}
+                        aria-label="始業時間"
                         sx={{
                             '& .MuiInputBase-root': {
                                 border: 'none',
@@ -47,6 +48,7 @@ const AttendanceRow = memo(function AttendanceRow({
                     <TimePicker
                         value={data.endtime}
                         onChange={(time) => handleEndTimeChange(data.day, time)}
+                        aria-label="終業時間"
                         sx={{
                             '& .MuiInputBase-root': {
                                 border: 'none',
@@ -64,6 +66,7 @@ const AttendanceRow = memo(function AttendanceRow({
                     <TimePicker
                         value={data.breaktime}
                         onChange={(time) => handleBreakTimeChange(data.day, time)}
+                        aria-label="休憩＋中抜け"
                         sx={{
                             '& .MuiInputBase-root': {
                                 border: 'none',
@@ -81,6 +84,7 @@ const AttendanceRow = memo(function AttendanceRow({
                     <TimePicker
                         value={data.workinghours}
                         onChange={(time) => handleWorkingHoursChange(data.day, time)}
+                        aria-label="所定内"
                         sx={{
                             '& .MuiInputBase-root': {
                                 border: 'none',
@@ -98,6 +102,7 @@ const AttendanceRow = memo(function AttendanceRow({
                     <TimePicker
                         value={data.earlyhours}
                         onChange={(time) => handleEarlyHoursChange(data.day, time)}
+                        aria-label="早出"
                         sx={{
                             '& .MuiInputBase-root': {
                                 border: 'none',
@@ -115,6 +120,7 @@ const AttendanceRow = memo(function AttendanceRow({
                     <TimePicker
                         value={data.overtimehours}
                         onChange={(time) => handleOvertimeHoursChange(data.day, time)}
+                        aria-label="残業"
                         sx={{
                             '& .MuiInputBase-root': {
                                 border: 'none',
@@ -132,6 +138,7 @@ const AttendanceRow = memo(function AttendanceRow({
                     <TimePicker
                         value={data.nightandholidayworks}
                         onChange={(time) => handleNightAndHolidayWorksChange(data.day, time)}
+                        aria-label="深夜/休出"
                         sx={{
                             '& .MuiInputBase-root': {
                                 border: 'none',
@@ -149,6 +156,7 @@ const AttendanceRow = memo(function AttendanceRow({
                     <Select
                         value={data.summary}
                         onChange={(event) => handleSummaryChange(data.day, event)}
+                        aria-label="摘要"
                         sx={{
                             border: 'none',
                             '& .MuiSelect-select': {
@@ -175,6 +183,7 @@ const AttendanceRow = memo(function AttendanceRow({
                     sx={{ width: '300px' }}
                     multiline
                     onChange={(event) => handleMemoChange(data.day, event)}
+                    aria-label="備考"
                     InputProps={{
                         sx: {
                             border: 'none',

@@ -1,4 +1,4 @@
-import { TableCell, TableRow } from "@mui/material";
+import { Grid, TableCell, TableRow, Typography } from "@mui/material";
 import { AttendanceData, TableTotalPrpps } from "@/types";
 
 const TableTotal = ({
@@ -85,21 +85,23 @@ const TableTotal = ({
     };
 
     return (
-        <TableRow>
-            <TableCell colSpan={5} sx={{ fontWeight: 'bold', textAlign: 'center', backgroundColor: '#007bff', color: 'white', width: 70 }}>合 計</TableCell>
-            <TableCell sx={{ fontWeight: 'bold', textAlign: 'center', width: 150, border: '1px solid #ccc'}}>
-                所定内: {calculateTotalWorkingHours(attendanceData)}
-            </TableCell>
-            <TableCell sx={{ fontWeight: 'bold', textAlign: 'center', width: 150, border: '1px solid #ccc'}}>
-                早出: {calculateTotalEarlyHours(attendanceData)}
-            </TableCell>
-            <TableCell sx={{ fontWeight: 'bold', textAlign: 'center', width: 150, border: '1px solid #ccc'}}>
-                残業: {calculateTotalOvertimeHours(attendanceData)}
-            </TableCell>
-            <TableCell sx={{ fontWeight: 'bold', textAlign: 'center', width: 150, border: '1px solid #ccc'}}>
-                深夜/休出: {calculateTotalNightAndHolidayWorks(attendanceData)}
-            </TableCell>
-        </TableRow>
+        <Grid container spacing={2} justifyContent="flex-start">
+            <Grid item xs={12} sm={2} sx={{ fontWeight: 'bold', textAlign: 'center', backgroundColor: '#007bff', color: 'white' }}>
+                合 計
+            </Grid>
+            <Grid item xs={12} sm={1.5} sx={{ textAlign: 'center', border: '1px solid #ccc' }}>
+                <Typography sx={{ fontWeighFt: 'bold' }}>所定内: {calculateTotalWorkingHours(attendanceData)}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={1.5} sx={{ textAlign: 'center', border: '1px solid #ccc' }}>
+                <Typography sx={{ fontWeight: 'bold' }}>早出: {calculateTotalEarlyHours(attendanceData)}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={1.5} sx={{ textAlign: 'center', border: '1px solid #ccc' }}>
+                <Typography sx={{ fontWeight: 'bold' }}>残業: {calculateTotalOvertimeHours(attendanceData)}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={1.5} sx={{ textAlign: 'center', border: '1px solid #ccc' }}>
+                <Typography sx={{ fontWeight: 'bold' }}>深夜/休出: {calculateTotalNightAndHolidayWorks(attendanceData)}</Typography>
+            </Grid>
+        </Grid>
     )
 };
 export default TableTotal;

@@ -110,6 +110,7 @@ const Attendance = () => {
       }
     } catch (error) {
       console.log('登録エラー:', error);
+      alert("登録処理中にエラーが発生しました");
     }
   };
 
@@ -370,16 +371,6 @@ const Attendance = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
 
   return (
     <>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import  Visibility  from "@mui/icons-material/Visibility";
-import  VisibilityOff  from "@mui/icons-material/VisibilityOff";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import {
   Button,
   Dialog,
@@ -13,9 +13,8 @@ import {
   InputAdornment,
   TextField,
 } from "@mui/material";
-import router from "next/router";
 import { PasswordUpdateProps, UpdateFormValues } from "@/types";
-
+import { useRouter } from "next/router";
 
 const PasswordUpdate = ({
   open,
@@ -30,7 +29,8 @@ const PasswordUpdate = ({
 
   const [newShowPassword, setNewShowPassword] = useState(false);
   const [currentShowPassword, setCurrentShowPassword] = useState(false);
-  
+  const router = useRouter();
+
   const handleClickNewShowPassword = () => {
     setNewShowPassword(!newShowPassword);
   };
