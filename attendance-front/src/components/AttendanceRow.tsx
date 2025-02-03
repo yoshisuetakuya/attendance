@@ -25,18 +25,22 @@ const AttendanceRow = memo(function AttendanceRow({
         <TableRow key={data.day}>
             <TableCell sx={{ border: '1px solid #ccc', padding: '1px 4px', height: '30px', width: '3' }}>{data.day}</TableCell>
             <TableCell sx={{ border: '1px solid #ccc', padding: '1px 4px', height: '30px' }}>{data.weekday}</TableCell>
-            <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px'}}>
+            <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
                     <TimePicker
                         value={data.starttime}
                         onChange={(time) => handleStartTimeChange(data.day, time)}
-                        aria-label="始業時間"
+                        label="始業時間"
+                        data-testid="starttime"
                         sx={{
                             '& .MuiInputBase-root': {
                                 border: 'none',
                             },
                             '& .MuiOutlinedInput-notchedOutline': {
                                 border: 'none',
+                            },
+                            '& .MuiInputLabel-root': {
+                                display: 'none',
                             },
                             height: '50px',
                         }}
@@ -48,13 +52,17 @@ const AttendanceRow = memo(function AttendanceRow({
                     <TimePicker
                         value={data.endtime}
                         onChange={(time) => handleEndTimeChange(data.day, time)}
-                        aria-label="終業時間"
+                        label="終業時間"
+                        data-testid="endtime"
                         sx={{
                             '& .MuiInputBase-root': {
                                 border: 'none',
                             },
                             '& .MuiOutlinedInput-notchedOutline': {
                                 border: 'none',
+                            },
+                            '& .MuiInputLabel-root': {
+                                display: 'none',
                             },
                             height: '50px',
                         }}
@@ -66,13 +74,17 @@ const AttendanceRow = memo(function AttendanceRow({
                     <TimePicker
                         value={data.breaktime}
                         onChange={(time) => handleBreakTimeChange(data.day, time)}
-                        aria-label="休憩＋中抜け"
+                        label="休憩＋中抜け"
+                        data-testid="breaktime"
                         sx={{
                             '& .MuiInputBase-root': {
                                 border: 'none',
                             },
                             '& .MuiOutlinedInput-notchedOutline': {
                                 border: 'none',
+                            },
+                            '& .MuiInputLabel-root': {
+                                display: 'none',
                             },
                             height: '50px',
                         }}
@@ -84,13 +96,17 @@ const AttendanceRow = memo(function AttendanceRow({
                     <TimePicker
                         value={data.workinghours}
                         onChange={(time) => handleWorkingHoursChange(data.day, time)}
-                        aria-label="所定内"
+                        label="所定内"
+                        data-testid="workinghours"
                         sx={{
                             '& .MuiInputBase-root': {
                                 border: 'none',
                             },
                             '& .MuiOutlinedInput-notchedOutline': {
                                 border: 'none',
+                            },
+                            '& .MuiInputLabel-root': {
+                                display: 'none',
                             },
                             height: '50px',
                         }}
@@ -102,13 +118,17 @@ const AttendanceRow = memo(function AttendanceRow({
                     <TimePicker
                         value={data.earlyhours}
                         onChange={(time) => handleEarlyHoursChange(data.day, time)}
-                        aria-label="早出"
+                        label="早出"
+                        data-testid="earlyhours"
                         sx={{
                             '& .MuiInputBase-root': {
                                 border: 'none',
                             },
                             '& .MuiOutlinedInput-notchedOutline': {
                                 border: 'none',
+                            },
+                            '& .MuiInputLabel-root': {
+                                display: 'none',
                             },
                             height: '50px',
                         }}
@@ -120,13 +140,17 @@ const AttendanceRow = memo(function AttendanceRow({
                     <TimePicker
                         value={data.overtimehours}
                         onChange={(time) => handleOvertimeHoursChange(data.day, time)}
-                        aria-label="残業"
+                        label="残業"
+                        data-testid="overtimehours"
                         sx={{
                             '& .MuiInputBase-root': {
                                 border: 'none',
                             },
                             '& .MuiOutlinedInput-notchedOutline': {
                                 border: 'none',
+                            },
+                            '& .MuiInputLabel-root': {
+                                display: 'none',
                             },
                             height: '50px',
                         }}
@@ -138,13 +162,17 @@ const AttendanceRow = memo(function AttendanceRow({
                     <TimePicker
                         value={data.nightandholidayworks}
                         onChange={(time) => handleNightAndHolidayWorksChange(data.day, time)}
-                        aria-label="深夜/休出"
+                        label="深夜/休出"
+                        data-testid="nightandholidayworks"
                         sx={{
                             '& .MuiInputBase-root': {
                                 border: 'none',
                             },
                             '& .MuiOutlinedInput-notchedOutline': {
                                 border: 'none',
+                            },
+                            '& .MuiInputLabel-root': {
+                                display: 'none',
                             },
                             height: '50px',
                         }}
@@ -154,9 +182,10 @@ const AttendanceRow = memo(function AttendanceRow({
             <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <FormControl fullWidth>
                     <Select
+                        data-testid="summary"  // テスト用にdata-testidを追加
+                        label="摘要"
                         value={data.summary}
                         onChange={(event) => handleSummaryChange(data.day, event)}
-                        aria-label="摘要"
                         sx={{
                             border: 'none',
                             '& .MuiSelect-select': {
@@ -183,7 +212,6 @@ const AttendanceRow = memo(function AttendanceRow({
                     sx={{ width: '300px' }}
                     multiline
                     onChange={(event) => handleMemoChange(data.day, event)}
-                    aria-label="備考"
                     InputProps={{
                         sx: {
                             border: 'none',
@@ -193,6 +221,7 @@ const AttendanceRow = memo(function AttendanceRow({
                             height: '30px',
                         },
                     }}
+                    data-testid="memo"
                 />
             </TableCell>
         </TableRow>
