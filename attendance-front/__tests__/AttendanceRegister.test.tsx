@@ -159,7 +159,7 @@ describe("handleSubmit関数のテスト", () => {
 
   const mockHandleChange = jest.fn();  // 変更処理をモック
 
-  it('入力確認テスト', () => {
+  it('入力欄の確認テスト', () => {
     render(
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <AttendanceRow
