@@ -8,6 +8,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { AttendanceRowProps } from '@/types'
+import { InputLabel } from '@mui/material';
 
 const AttendanceRow = memo(function AttendanceRow({
     data,
@@ -44,6 +45,14 @@ const AttendanceRow = memo(function AttendanceRow({
                             },
                             height: '50px',
                         }}
+                        slots={{
+                            textField: (textFieldProps) => (
+                                <TextField
+                                    {...textFieldProps}
+                                    inputProps={{ 'data-testid': 'starttime' }}
+                                />
+                            ),
+                        }}
                     />
                 </Box>
             </TableCell>
@@ -65,6 +74,14 @@ const AttendanceRow = memo(function AttendanceRow({
                                 display: 'none',
                             },
                             height: '50px',
+                        }}
+                        slots={{
+                            textField: (textFieldProps) => (
+                                <TextField
+                                    {...textFieldProps}
+                                    inputProps={{ 'data-testid': 'endtime' }}
+                                />
+                            ),
                         }}
                     />
                 </Box>
@@ -88,6 +105,14 @@ const AttendanceRow = memo(function AttendanceRow({
                             },
                             height: '50px',
                         }}
+                        slots={{
+                            textField: (textFieldProps) => (
+                                <TextField
+                                    {...textFieldProps}
+                                    inputProps={{ 'data-testid': 'breaktime' }}
+                                />
+                            ),
+                        }}
                     />
                 </Box>
             </TableCell>
@@ -109,6 +134,14 @@ const AttendanceRow = memo(function AttendanceRow({
                                 display: 'none',
                             },
                             height: '50px',
+                        }}
+                        slots={{
+                            textField: (textFieldProps) => (
+                                <TextField
+                                    {...textFieldProps}
+                                    inputProps={{ 'data-testid': 'workinghours' }}
+                                />
+                            ),
                         }}
                     />
                 </Box>
@@ -132,6 +165,14 @@ const AttendanceRow = memo(function AttendanceRow({
                             },
                             height: '50px',
                         }}
+                        slots={{
+                            textField: (textFieldProps) => (
+                                <TextField
+                                    {...textFieldProps}
+                                    inputProps={{ 'data-testid': 'earlyhours' }}
+                                />
+                            ),
+                        }}
                     />
                 </Box>
             </TableCell>
@@ -153,6 +194,14 @@ const AttendanceRow = memo(function AttendanceRow({
                                 display: 'none',
                             },
                             height: '50px',
+                        }}
+                        slots={{
+                            textField: (textFieldProps) => (
+                                <TextField
+                                    {...textFieldProps}
+                                    inputProps={{ 'data-testid': 'overtimehours' }}
+                                />
+                            ),
                         }}
                     />
                 </Box>
@@ -176,13 +225,23 @@ const AttendanceRow = memo(function AttendanceRow({
                             },
                             height: '50px',
                         }}
+                        slots={{
+                            textField: (textFieldProps) => (
+                                <TextField
+                                    {...textFieldProps}
+                                    inputProps={{ 'data-testid': 'nightandholidayworks' }}
+                                />
+                            ),
+                        }}
                     />
                 </Box>
             </TableCell>
             <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <FormControl fullWidth>
+                    <InputLabel id={`summary-label`}>摘要</InputLabel>
                     <Select
-                        data-testid="summary"  // テスト用にdata-testidを追加
+                        labelId={`summary-label`}
+                        data-testid="summary"
                         label="摘要"
                         value={data.summary}
                         onChange={(event) => handleSummaryChange(data.day, event)}
@@ -221,7 +280,11 @@ const AttendanceRow = memo(function AttendanceRow({
                             height: '30px',
                         },
                     }}
+                    InputLabelProps={{
+                        sx: { display: 'none' },
+                    }}
                     data-testid="memo"
+                    label="備考"
                 />
             </TableCell>
         </TableRow>
