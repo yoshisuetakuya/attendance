@@ -200,7 +200,7 @@ describe("handleSubmit関数のテスト", () => {
   // fireEvent.click(screen.getByRole("option", { name: /am/i }));
 
   // 時間が正しく設定されたことを確認
-  expect(starttime).toHaveValue("01:55 AM"); // ここで期待する時間を確認
+  expect(starttime).toHaveValue("01:55 AM"); // 期待する時間
 
 
     // 終業時間の確認
