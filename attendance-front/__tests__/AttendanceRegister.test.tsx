@@ -36,7 +36,7 @@ describe("handleSubmit関数のテスト", () => {
   });
 
 
-  it("入力確認を行い登録APIが呼ばれて、成功のメッセージが表示される", async () => {
+  it("入力を行い登録APIが呼ばれて、成功のメッセージが表示される", async () => {
 
     const mockData = {
       day: 3,
