@@ -90,7 +90,7 @@ const TableTotal = ({
                 合 計
             </Grid>
             <Grid item xs={12} sm={1.5} sx={{ textAlign: 'center', border: '1px solid #ccc' }}>
-                <Typography sx={{ fontWeighFt: 'bold' }}>所定内: {calculateTotalWorkingHours(attendanceData)}</Typography>
+                <Typography sx={{ fontWeight: 'bold', }}>所定内: {calculateTotalWorkingHours(attendanceData)}</Typography>
             </Grid>
             <Grid item xs={12} sm={1.5} sx={{ textAlign: 'center', border: '1px solid #ccc' }}>
                 <Typography sx={{ fontWeight: 'bold' }}>早出: {calculateTotalEarlyHours(attendanceData)}</Typography>

@@ -8,7 +8,6 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { AttendanceRowProps } from '@/types'
-import { InputLabel } from '@mui/material';
 
 const AttendanceRow = memo(function AttendanceRow({
     data,
@@ -28,242 +27,197 @@ const AttendanceRow = memo(function AttendanceRow({
             <TableCell sx={{ border: '1px solid #ccc', padding: '1px 4px', height: '30px' }}>{data.weekday}</TableCell>
             <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
-                    <TimePicker
-                        value={data.starttime}
-                        onChange={(time) => handleStartTimeChange(data.day, time)}
-                        label="始業時間"
-                        data-testid="starttime"
-                        sx={{
-                            '& .MuiInputBase-root': {
-                                border: 'none',
-                            },
-                            '& .MuiOutlinedInput-notchedOutline': {
-                                border: 'none',
-                            },
-                            '& .MuiInputLabel-root': {
-                                display: 'none',
-                            },
-                            height: '50px',
-                        }}
-                        slots={{
-                            textField: (textFieldProps) => (
-                                <TextField
-                                    {...textFieldProps}
-                                    inputProps={{ 'data-testid': 'starttime' }}
-                                />
-                            ),
-                        }}
-                    />
+                    <div data-testid="starttime">
+                        <TimePicker
+                            value={data.starttime}
+                            onChange={(time) => handleStartTimeChange(data.day, time)}
+                            label="始業時間"
+                            sx={{
+                                '& .MuiInputBase-root': {
+                                    border: 'none',
+                                },
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                    border: 'none',
+                                },
+                                '& .MuiInputLabel-root': {
+                                    display: 'none',
+                                },
+                                height: '50px',
+                            }}
+                        />
+                    </div>
                 </Box>
             </TableCell>
             <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
-                    <TimePicker
-                        value={data.endtime}
-                        onChange={(time) => handleEndTimeChange(data.day, time)}
-                        label="終業時間"
-                        data-testid="endtime"
-                        sx={{
-                            '& .MuiInputBase-root': {
-                                border: 'none',
-                            },
-                            '& .MuiOutlinedInput-notchedOutline': {
-                                border: 'none',
-                            },
-                            '& .MuiInputLabel-root': {
-                                display: 'none',
-                            },
-                            height: '50px',
-                        }}
-                        slots={{
-                            textField: (textFieldProps) => (
-                                <TextField
-                                    {...textFieldProps}
-                                    inputProps={{ 'data-testid': 'endtime' }}
-                                />
-                            ),
-                        }}
-                    />
+                    <div data-testid="endtime">
+                        <TimePicker
+                            value={data.endtime}
+                            onChange={(time) => handleEndTimeChange(data.day, time)}
+                            label="終業時間"
+                            data-testid="endtime-picker"
+                            sx={{
+                                '& .MuiInputBase-root': {
+                                    border: 'none',
+                                },
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                    border: 'none',
+                                },
+                                '& .MuiInputLabel-root': {
+                                    display: 'none',
+                                },
+                                height: '50px',
+                            }}
+                        />
+                    </div>
                 </Box>
             </TableCell>
             <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
-                    <TimePicker
-                        value={data.breaktime}
-                        onChange={(time) => handleBreakTimeChange(data.day, time)}
-                        label="休憩＋中抜け"
-                        data-testid="breaktime"
-                        sx={{
-                            '& .MuiInputBase-root': {
-                                border: 'none',
-                            },
-                            '& .MuiOutlinedInput-notchedOutline': {
-                                border: 'none',
-                            },
-                            '& .MuiInputLabel-root': {
-                                display: 'none',
-                            },
-                            height: '50px',
-                        }}
-                        slots={{
-                            textField: (textFieldProps) => (
-                                <TextField
-                                    {...textFieldProps}
-                                    inputProps={{ 'data-testid': 'breaktime' }}
-                                />
-                            ),
-                        }}
-                    />
+                    <div data-testid="breaktime">
+                        <TimePicker
+                            value={data.breaktime}
+                            onChange={(time) => handleBreakTimeChange(data.day, time)}
+                            label="休憩＋中抜け"
+                            data-testid="breaktime"
+                            sx={{
+                                '& .MuiInputBase-root': {
+                                    border: 'none',
+                                },
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                    border: 'none',
+                                },
+                                '& .MuiInputLabel-root': {
+                                    display: 'none',
+                                },
+                                height: '50px',
+                            }}
+                        />
+                    </div>
                 </Box>
             </TableCell>
             <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
-                    <TimePicker
-                        value={data.workinghours}
-                        onChange={(time) => handleWorkingHoursChange(data.day, time)}
-                        label="所定内"
-                        data-testid="workinghours"
-                        sx={{
-                            '& .MuiInputBase-root': {
-                                border: 'none',
-                            },
-                            '& .MuiOutlinedInput-notchedOutline': {
-                                border: 'none',
-                            },
-                            '& .MuiInputLabel-root': {
-                                display: 'none',
-                            },
-                            height: '50px',
-                        }}
-                        slots={{
-                            textField: (textFieldProps) => (
-                                <TextField
-                                    {...textFieldProps}
-                                    inputProps={{ 'data-testid': 'workinghours' }}
-                                />
-                            ),
-                        }}
-                    />
+                    <div data-testid="workinghours">
+                        <TimePicker
+                            value={data.workinghours}
+                            onChange={(time) => handleWorkingHoursChange(data.day, time)}
+                            label="所定内"
+                            data-testid="workinghours"
+                            sx={{
+                                '& .MuiInputBase-root': {
+                                    border: 'none',
+                                },
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                    border: 'none',
+                                },
+                                '& .MuiInputLabel-root': {
+                                    display: 'none',
+                                },
+                                height: '50px',
+                            }}
+                        />
+                    </div>
                 </Box>
             </TableCell>
             <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
-                    <TimePicker
-                        value={data.earlyhours}
-                        onChange={(time) => handleEarlyHoursChange(data.day, time)}
-                        label="早出"
-                        data-testid="earlyhours"
-                        sx={{
-                            '& .MuiInputBase-root': {
-                                border: 'none',
-                            },
-                            '& .MuiOutlinedInput-notchedOutline': {
-                                border: 'none',
-                            },
-                            '& .MuiInputLabel-root': {
-                                display: 'none',
-                            },
-                            height: '50px',
-                        }}
-                        slots={{
-                            textField: (textFieldProps) => (
-                                <TextField
-                                    {...textFieldProps}
-                                    inputProps={{ 'data-testid': 'earlyhours' }}
-                                />
-                            ),
-                        }}
-                    />
+                    <div data-testid="earlyhours">
+                        <TimePicker
+                            value={data.earlyhours}
+                            onChange={(time) => handleEarlyHoursChange(data.day, time)}
+                            label="早出"
+                            data-testid="earlyhours"
+                            sx={{
+                                '& .MuiInputBase-root': {
+                                    border: 'none',
+                                },
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                    border: 'none',
+                                },
+                                '& .MuiInputLabel-root': {
+                                    display: 'none',
+                                },
+                                height: '50px',
+                            }}
+                        />
+                    </div>
                 </Box>
             </TableCell>
             <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
-                    <TimePicker
-                        value={data.overtimehours}
-                        onChange={(time) => handleOvertimeHoursChange(data.day, time)}
-                        label="残業"
-                        data-testid="overtimehours"
-                        sx={{
-                            '& .MuiInputBase-root': {
-                                border: 'none',
-                            },
-                            '& .MuiOutlinedInput-notchedOutline': {
-                                border: 'none',
-                            },
-                            '& .MuiInputLabel-root': {
-                                display: 'none',
-                            },
-                            height: '50px',
-                        }}
-                        slots={{
-                            textField: (textFieldProps) => (
-                                <TextField
-                                    {...textFieldProps}
-                                    inputProps={{ 'data-testid': 'overtimehours' }}
-                                />
-                            ),
-                        }}
-                    />
+                    <div data-testid="overtimehours">
+                        <TimePicker
+                            value={data.overtimehours}
+                            onChange={(time) => handleOvertimeHoursChange(data.day, time)}
+                            label="残業"
+                            data-testid="overtimehours"
+                            sx={{
+                                '& .MuiInputBase-root': {
+                                    border: 'none',
+                                },
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                    border: 'none',
+                                },
+                                '& .MuiInputLabel-root': {
+                                    display: 'none',
+                                },
+                                height: '50px',
+                            }}
+                        />
+                    </div>
                 </Box>
             </TableCell>
             <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <Box sx={{ width: '120px' }}>
-                    <TimePicker
-                        value={data.nightandholidayworks}
-                        onChange={(time) => handleNightAndHolidayWorksChange(data.day, time)}
-                        label="深夜/休出"
-                        data-testid="nightandholidayworks"
-                        sx={{
-                            '& .MuiInputBase-root': {
-                                border: 'none',
-                            },
-                            '& .MuiOutlinedInput-notchedOutline': {
-                                border: 'none',
-                            },
-                            '& .MuiInputLabel-root': {
-                                display: 'none',
-                            },
-                            height: '50px',
-                        }}
-                        slots={{
-                            textField: (textFieldProps) => (
-                                <TextField
-                                    {...textFieldProps}
-                                    inputProps={{ 'data-testid': 'nightandholidayworks' }}
-                                />
-                            ),
-                        }}
-                    />
+                    <div data-testid="nightandholidayworks">
+                        <TimePicker
+                            value={data.nightandholidayworks}
+                            onChange={(time) => handleNightAndHolidayWorksChange(data.day, time)}
+                            label="深夜/休出"
+                            data-testid="nightandholidayworks"
+                            sx={{
+                                '& .MuiInputBase-root': {
+                                    border: 'none',
+                                },
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                    border: 'none',
+                                },
+                                '& .MuiInputLabel-root': {
+                                    display: 'none',
+                                },
+                                height: '50px',
+                            }}
+                        />
+                    </div>
                 </Box>
             </TableCell>
             <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
-                <FormControl fullWidth>
-                    <InputLabel id={`summary-label`}>摘要</InputLabel>
-                    <Select
-                        labelId={`summary-label`}
-                        data-testid="summary"
-                        label="摘要"
-                        value={data.summary}
-                        onChange={(event) => handleSummaryChange(data.day, event)}
-                        sx={{
-                            border: 'none',
-                            '& .MuiSelect-select': {
+                <div data-testid="summary">
+                    <FormControl fullWidth>
+                        <Select
+                            value={data.summary}
+                            onChange={(event) => handleSummaryChange(data.day, event)}
+                            sx={{
                                 border: 'none',
-                            },
-                            '& .MuiOutlinedInput-notchedOutline': {
-                                border: 'none',
-                            },
-                            height: '30px',
-                        }}
-                    >
-                        <MenuItem value="">選択なし</MenuItem>
-                        <MenuItem value="有給">有給</MenuItem>
-                        <MenuItem value="欠勤">欠勤</MenuItem>
-                        <MenuItem value="特休">特休</MenuItem>
-                        <MenuItem value="早退">早退</MenuItem>
-                        <MenuItem value="遅刻">遅刻</MenuItem>
-                    </Select>
-                </FormControl>
+                                '& .MuiSelect-select': {
+                                    border: 'none',
+                                },
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                    border: 'none',
+                                },
+                                height: '30px',
+                            }}
+                        >
+                            <MenuItem value="">選択なし</MenuItem>
+                            <MenuItem value="有給">有給</MenuItem>
+                            <MenuItem value="欠勤">欠勤</MenuItem>
+                            <MenuItem value="特休">特休</MenuItem>
+                            <MenuItem value="早退">早退</MenuItem>
+                            <MenuItem value="遅刻">遅刻</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>
             </TableCell>
             <TableCell sx={{ border: '1px solid #ccc', padding: '1px', height: '30px' }}>
                 <TextField
@@ -284,7 +238,6 @@ const AttendanceRow = memo(function AttendanceRow({
                         sx: { display: 'none' },
                     }}
                     data-testid="memo"
-                    label="備考"
                 />
             </TableCell>
         </TableRow>
