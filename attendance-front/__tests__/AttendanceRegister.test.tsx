@@ -135,7 +135,7 @@ describe("勤怠登録画面のテスト", () => {
     if (memoInput) {
       await userEvent.type(memoInput, 'メモ');
     };
-    // "メモ" という文字列が入力されていることを確認
+    // メモという文字列が入力されていることを確認
     await waitFor(() => {
       expect(screen.findByDisplayValue('メモ')).resolves.toBeInTheDocument();
     });
