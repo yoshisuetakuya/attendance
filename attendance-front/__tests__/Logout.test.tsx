@@ -8,7 +8,7 @@ jest.mock("next/router", () => ({
     useRouter: jest.fn(),
 }));
 
-describe("MonthlyListコンポーネントのテスト", () => {
+describe("ログアウトのテスト", () => {
     const mockPush = jest.fn();
 
     beforeEach(() => {

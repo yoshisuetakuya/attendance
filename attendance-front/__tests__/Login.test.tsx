@@ -73,7 +73,6 @@ describe("ログインコンポーネントのテスト", () => {
     });
   });
 
-
   it("ログイン時にネットワークエラーが発生した場合、エラーメッセージが表示される", async () => {
     global.fetch = jest.fn(() => Promise.reject("Network Error")) as jest.Mock;
 

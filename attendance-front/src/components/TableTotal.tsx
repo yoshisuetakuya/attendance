@@ -85,7 +85,7 @@ const TableTotal = ({
     };
 
     return (
-        <Grid container spacing={2} justifyContent="flex-start">
+        <Grid container spacing={2} justifyContent="flex-start"sx={{ marginTop: '2px'}}>
             <Grid item xs={12} sm={2} sx={{ fontWeight: 'bold', textAlign: 'center', backgroundColor: '#007bff', color: 'white' }}>
                 合 計
             </Grid>
